@@ -10,21 +10,25 @@ const customerSchema = new mongoose.Schema({
     type: String,
     required: [true, "Customer name is required"],
   },
-  contact: {
-    phone: {
-      type: Number,
-      required: [true, "Phone number is required"],
-    },
-    email: {
-      type: String,
-      required: [true, "Email is required"],
-    },
+  unicode:{
+    type: String,
+    required: [true, "Unicode is required"],
   },
-  region: {
+  phone: {
+    type: Number,
+    required: [true, "Phone number is required"],
+  },
+  email: {
+    type: String,
+    required: [true, "Email is required"],
+  },
+
+  address: {
     type: String,
     required: [true, "Region is required"],
   },
 });
 
-const Customer = mongoose.models.Customer || mongoose.model("Customer", customerSchema);
+const Customer =
+  mongoose.models.Customer || mongoose.model("Customer", customerSchema);
 export default Customer;
