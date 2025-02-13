@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
       name: user.fullName,
       userType: user.userType,
     };
-    const customer = await Customer.findOne({ phone }).select("_id").exec();
+    const customer = await Customer.findOne({ phone })
     if (!customer) {
       return NextResponse.json(
         { error: "Customer not found" },
@@ -44,6 +44,7 @@ export async function POST(request: NextRequest) {
     const newOrder = new Order({
       orderNumber: counter.seq,
       customerId: customer._id,
+      customerName: customer.customerName,
       orderDate,
       status,
       totalAmount,

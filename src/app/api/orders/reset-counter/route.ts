@@ -1,10 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { connectDB } from "@/db/connectDB";
 import Counter from "@/models/counter/counter.model";
 
 connectDB();
 
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
     const resetValue = 0;
     const currentDate = new Date();

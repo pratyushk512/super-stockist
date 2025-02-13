@@ -5,6 +5,10 @@ const orderSchema = new mongoose.Schema({
     ref: "Customer",
     required: [true, "Customer ID is required"],
   },
+  customerName: {
+    type: String,
+    required: [true, "Customer name is required"],
+  },
   orderNumber: {
     type: Number,
     required: [true, "Order number is required"],

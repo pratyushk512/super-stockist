@@ -36,6 +36,7 @@ export async function POST(request: NextRequest) {
     const newOrder = new Order({
       orderNumber,
       customerId: loggedInUser.id,
+      customerName: user.customerName,
       orderDate,
       status,
       totalAmount,
