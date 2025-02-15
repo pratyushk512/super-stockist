@@ -12,6 +12,7 @@ import { Search } from "@/components/admin/search"
 import { UserNav } from "@/components/admin/user-nav"
 import { Order } from "@/types/types"
 import { useOrdersStore } from "@/store/ordersStore"
+import Loader from "@/components/Loader"
 
 const statusColors = {
     pending: "bg-yellow-500/10 text-yellow-500",
@@ -32,9 +33,8 @@ export default function OrdersTable() {
     })
 
     useEffect(() => {
-        // Fetch orders when component mounts
         fetchOrders()
-    }, []) // Empty dependency array means this runs once on mount
+    }, []) 
 
     const filteredOrders = Array.isArray(orders)
         ? orders.filter((order) =>
@@ -52,7 +52,7 @@ export default function OrdersTable() {
     if (isLoading) {
         return (
             <div className="flex items-center justify-center min-h-screen">
-                <div className="text-lg">Loading orders...</div>
+                <Loader />
             </div>
         )
     }
