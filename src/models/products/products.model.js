@@ -17,12 +17,17 @@ const productSchema = new mongoose.Schema(
       type: Number,
       required: [true, "Units per box is required"],
     },
+    unitsSold:{
+      type: Number,
+      required: [true, "Units sold is required"],
+      default: 0
+    },
     category:{
       type: String,
       enum: ["Cardboard","Marker","Pencil","Pen","Scale","Sharpner","Sketchpen","Stapler","Staplerpin","Whitener"],
       required: [true, "Category is required"],
     },
-    stock: {
+    currStock: {
       type: Number,
       required: [true, "Stock quantity is required"],
     },

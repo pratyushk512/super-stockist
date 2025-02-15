@@ -20,3 +20,14 @@ export type Order = {
     userType: string;
   };
 };
+
+export type Product = {
+  _id: string;
+  name: string;
+  description: string;
+  price: string;
+  category: string;
+  currStock: number;
+  unitsPerBox: number;
+  unitsSold: number;
+};

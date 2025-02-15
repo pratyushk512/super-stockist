@@ -3,7 +3,6 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  BarChart3,
   Package,
   PackagePlus,
   RefreshCw,
@@ -16,30 +15,38 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { UserNav } from "@/components/admin/user-nav";
 import { useRouter } from "next/navigation";
 import { FileSearch, ArrowUpDown, Eye } from 'lucide-react';
+import { useProductStore } from '@/store/productsStore';
+import Loader from "@/components/Loader";
+import React, { useState, useMemo, useEffect } from 'react';
+import { Product } from '@/types/types';
 
+// interface Product {
+//   id: number;
+//   name: string;
+//   price: number;
+//   unitsSold: number;
+//   currentStock: number;
+//   category: string;
+// }
 
-import React, { useState, useMemo } from 'react';
-
-
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  unitsSold: number;
-  currentStock: number;
-  category: string;
-}
-
-const initialProducts: Product[] = [
-  { id: 1, name: "Laptop Pro",category:"Electronics", price: 1299.99, unitsSold: 150, currentStock: 50 },
-  { id: 2, name: "Wireless Mouse",category:"Home", price: 29.99, unitsSold: 300, currentStock: 200 },
-  { id: 3, name: "Mechanical Keyboard",category:"Accessories", price: 159.99, unitsSold: 200, currentStock: 75 },
-  { id: 4, name: "4K Monitor",category:"Screen", price: 499.99, unitsSold: 100, currentStock: 25 },
-  { id: 5, name: "USB-C Hub",category:"Accessories", price: 49.99, unitsSold: 400, currentStock: 150 },
-];
+// const initialProducts: Product[] = [
+//   { id: 1, name: "Laptop Pro",category:"Electronics", price: 1299.99, unitsSold: 150, currentStock: 50 },
+//   { id: 2, name: "Wireless Mouse",category:"Home", price: 29.99, unitsSold: 300, currentStock: 200 },
+//   { id: 3, name: "Mechanical Keyboard",category:"Accessories", price: 159.99, unitsSold: 200, currentStock: 75 },
+//   { id: 4, name: "4K Monitor",category:"Screen", price: 499.99, unitsSold: 100, currentStock: 25 },
+//   { id: 5, name: "USB-C Hub",category:"Accessories", price: 49.99, unitsSold: 400, currentStock: 150 },
+// ];
 
 function App() {
   const router = useRouter();
+  const products = useProductStore((state) => state.products);
+  const isLoading = useProductStore((state) => state.isLoading);
+  const fetchProducts = useProductStore((state) => state.fetchProducts);
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
   const handleStoreClick = () => {
     router.push('/admin/products/store');
   }
@@ -59,30 +66,41 @@ function App() {
           : 'asc',
     });
   };
-
   const filteredAndSortedProducts = useMemo(() => {
-    let filtered = initialProducts.filter((product) =>
+    console.log("filter :", products);
+    let filtered = products.filter((product) =>
       product.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     if (sortConfig.key) {
       filtered.sort((a, b) => {
-        if (a[sortConfig.key!] < b[sortConfig.key!]) {
-          return sortConfig.direction === 'asc' ? -1 : 1;
+        const aValue = sortConfig.key === "price" ? parseFloat(a.price) : a[sortConfig.key!];
+        const bValue = sortConfig.key === "price" ? parseFloat(b.price) : b[sortConfig.key!];
+  
+        if (aValue < bValue) {
+          return sortConfig.direction === "asc" ? -1 : 1;
         }
-        if (a[sortConfig.key!] > b[sortConfig.key!]) {
-          return sortConfig.direction === 'asc' ? 1 : -1;
+        if (aValue > bValue) {
+          return sortConfig.direction === "asc" ? 1 : -1;
         }
         return 0;
       });
     }
 
     return filtered;
-  }, [searchTerm, sortConfig]);
+  }, [products,searchTerm, sortConfig]);
 
-  const handleViewProduct = (productId: number) => {
-    alert(`Viewing product ${productId}`);
-  };
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader />
+      </div>
+    )
+  }
+  const handleViewProduct = (productId: string) => {
+    router.push(`/admin/products/${productId}`)
+}
+
   return (
     <>
       <div className="border-b">
@@ -207,7 +225,7 @@ function App() {
                         <th className="h-8 px-3 text-left align-middle">
                           <Button
                             variant="ghost"
-                            onClick={() => handleSort('currentStock')}
+                            onClick={() => handleSort('currStock')}
                             className="hover:bg-transparent px-0 text-l font-bold"
                           >
                             Current Stock
@@ -219,17 +237,17 @@ function App() {
                     </thead>
                     <tbody>
                       {filteredAndSortedProducts.map((product) => (
-                        <tr key={product.id} className="border-b hover:bg-muted/50">
+                        <tr key={product._id} className="border-b hover:bg-muted/50">
                           <td className="px-3 py-2 align-middle text-sm">{product.name}</td>
                           <td className="px-3 py-2 align-middle text-sm">{product.category}</td>
-                          <td className="px-3 py-2 align-middle text-sm">${product.price.toFixed(2)}</td>
+                          <td className="px-3 py-2 align-middle text-sm">₹{parseFloat(product.price)}</td>
                           <td className="px-3 py-2 align-middle text-sm">{product.unitsSold}</td>
-                          <td className="px-3 py-2 align-middle text-sm">{product.currentStock}</td>
+                          <td className="px-3 py-2 align-middle text-sm">{product.currStock}</td>
                           <td className="px-3 py-2 align-middle">
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={() => handleViewProduct(product.id)}
+                              onClick={() => handleViewProduct(product._id)}
                               className="h-7 font-bold bg-orange-600"
                             >
                               <Eye className="h-3 w-3 mr-1" />
