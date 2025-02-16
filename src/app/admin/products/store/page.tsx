@@ -1,5 +1,5 @@
 'use client'
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
@@ -12,40 +12,40 @@ import {
   Plus, 
   Minus,
   Tags,
-  X
+  X,
+  Box
 } from "lucide-react";
+import { useProductStore } from "@/store/productsStore";
+import { Product } from "@/types/types";
+import { MainNav } from "@/components/admin/main-nav";
+import { Search } from "@/components/admin/search";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { UserNav } from "@/components/admin/user-nav";
 
-// Mock data with more categories
-const products = [
-  { id: 1, name: "Gaming Laptop", price: 1299, category: "Electronics", image: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=500" },
-  { id: 2, name: "Mechanical Keyboard", price: 129, category: "Electronics", image: "https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?w=500" },
-  { id: 3, name: "Cotton T-Shirt", price: 29, category: "Clothing", image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500" },
-  { id: 4, name: "Denim Jeans", price: 79, category: "Clothing", image: "https://images.unsplash.com/photo-1542272604-787c3835535d?w=500" },
-  { id: 5, name: "Coffee Maker", price: 89, category: "Kitchen", image: "https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?w=500" },
-  { id: 6, name: "Smart Watch", price: 299, category: "Electronics", image: "https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=500" },
-  { id: 7, name: "Running Shoes", price: 119, category: "Sports", image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500" },
-  { id: 8, name: "Yoga Mat", price: 49, category: "Sports", image: "https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=500" },
-  { id: 9, name: "Desk Lamp", price: 39, category: "Home Office", image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=500" },
-  { id: 10, name: "Wireless Mouse", price: 59, category: "Electronics", image: "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=500" },
-  { id: 11, name: "Blender", price: 79, category: "Kitchen", image: "https://images.unsplash.com/photo-1619847909339-1d2bf32a8fdd?w=500" },
-  { id: 12, name: "Office Chair", price: 199, category: "Home Office", image: "https://images.unsplash.com/photo-1589384267710-7a25bc24e2d6?w=500" },
-];
-
-const categories = [...new Set(products.map(product => product.category))];
 
 interface CartItem {
-  id: number;
+  _id: string;
   name: string;
-  price: number;
+  description: string;
+  price: string;
+  category: string;
+  currStock: number;
+  unitsPerBox: number;
+  unitsSold: number;
   quantity: number;
+  totalAmount: number;
 }
 
-function CartContent({ cart, removeFromCart, updateQuantity, totalAmount }: {
+function CartContent({ cart, removeFromCart, updateQuantity }: {
   cart: CartItem[];
-  removeFromCart: (id: number) => void;
-  updateQuantity: (id: number, delta: number) => void;
-  totalAmount: number;
+  removeFromCart: (id: string) => void;
+  updateQuantity: (id: string, delta: number) => void;
 }) {
+  const [totalAmount, setTotalAmount] = useState(0);
+  useMemo(() => {
+    const total = cart.reduce((sum, item) => sum + (parseFloat(item.price) * item.quantity), 0);
+    setTotalAmount(total);
+  }, [cart]);
   return (
     <div className="flex flex-col h-full">
       <ScrollArea className="flex-1">
@@ -57,7 +57,7 @@ function CartContent({ cart, removeFromCart, updateQuantity, totalAmount }: {
         ) : (
           <div className="space-y-4">
             {cart.map(item => (
-              <div key={item.id} className="space-y-2">
+              <div key={item._id} className="space-y-2">
                 <div className="flex justify-between items-start">
                   <div>
                     <h4 className="font-medium">{item.name}</h4>
@@ -68,7 +68,7 @@ function CartContent({ cart, removeFromCart, updateQuantity, totalAmount }: {
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() => removeFromCart(item.id)}
+                    onClick={() => removeFromCart(item._id)}
                   >
                     <X className="h-4 w-4" />
                   </Button>
@@ -77,7 +77,7 @@ function CartContent({ cart, removeFromCart, updateQuantity, totalAmount }: {
                   <Button
                     variant="outline"
                     size="icon"
-                    onClick={() => updateQuantity(item.id, -1)}
+                    onClick={() => updateQuantity(item._id, -item.unitsPerBox)}
                   >
                     <Minus className="h-4 w-4" />
                   </Button>
@@ -85,7 +85,7 @@ function CartContent({ cart, removeFromCart, updateQuantity, totalAmount }: {
                   <Button
                     variant="outline"
                     size="icon"
-                    onClick={() => updateQuantity(item.id, 1)}
+                    onClick={() => updateQuantity(item._id, item.unitsPerBox)}
                   >
                     <Plus className="h-4 w-4" />
                   </Button>
@@ -101,7 +101,7 @@ function CartContent({ cart, removeFromCart, updateQuantity, totalAmount }: {
         <Separator />
         <div className="flex justify-between items-center">
           <span className="font-semibold">Total:</span>
-          <span className="text-2xl font-bold">₹{totalAmount}</span>
+          <span className="text-2xl font-bold">₹{totalAmount.toFixed(2)}</span>
         </div>
         <Button className="w-full" disabled={cart.length === 0}>
           Checkout
@@ -112,6 +112,13 @@ function CartContent({ cart, removeFromCart, updateQuantity, totalAmount }: {
 }
 
 function Store() {
+  const {products,fetchProducts} = useProductStore();
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const categories = [...new Set(products.map(product => product.category))];
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [cart, setCart] = useState<CartItem[]>([]);
 
@@ -119,28 +126,28 @@ function Store() {
     ? products.filter(product => product.category === selectedCategory)
     : products;
 
-  const addToCart = (product: typeof products[0]) => {
+  const addToCart = (product: Product) => {
     setCart(currentCart => {
-      const existingItem = currentCart.find(item => item.id === product.id);
+      const existingItem = currentCart.find(item => item._id === product._id);
       if (existingItem) {
         return currentCart.map(item =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
+          item._id === product._id
+            ? { ...item, quantity: item.quantity+item.unitsPerBox ,totalAmount: item.totalAmount+parseFloat(item.price) }
             : item
         );
       }
-      return [...currentCart, { ...product, quantity: 1 }];
+      return [...currentCart, { ...product, quantity: product.unitsPerBox, totalAmount: parseFloat(product.price) * product.unitsPerBox }];
     });
   };
 
-  const removeFromCart = (productId: number) => {
-    setCart(currentCart => currentCart.filter(item => item.id !== productId));
+  const removeFromCart = (productId: string) => {
+    setCart(currentCart => currentCart.filter(item => item._id !== productId));
   };
 
-  const updateQuantity = (productId: number, delta: number) => {
+  const updateQuantity = (productId: string, delta: number) => {
     setCart(currentCart => 
       currentCart.map(item => {
-        if (item.id === productId) {
+        if (item._id === productId) {
           const newQuantity = item.quantity + delta;
           return newQuantity > 0 ? { ...item, quantity: newQuantity } : item;
         }
@@ -149,10 +156,20 @@ function Store() {
     );
   };
 
-  const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const cartItemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
+    <>
+    <div className="border-b">
+        <div className="flex h-16 items-center px-4">
+          <MainNav className="mx-6" />
+          <div className="ml-auto flex items-center space-x-4">
+            <Search />
+            <ThemeToggle />
+            <UserNav />
+          </div>
+        </div>
+      </div>
     <div className="min-h-screen bg-background">
       {/* Mobile Cart Button */}
       <div className="md:hidden fixed bottom-4 right-4 z-50">
@@ -184,7 +201,6 @@ function Store() {
                 cart={cart}
                 removeFromCart={removeFromCart}
                 updateQuantity={updateQuantity}
-                totalAmount={totalAmount}
               />
             </div>
           </SheetContent>
@@ -225,10 +241,9 @@ function Store() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {filteredProducts.map(product => (
-                <Card key={product.id} className="overflow-hidden">
+                <Card key={product._id} className="overflow-hidden">
                   <div className="aspect-video w-full overflow-hidden">
                     <img 
-                      src={product.image} 
                       alt={product.name}
                       className="w-full h-full object-cover transition-transform hover:scale-105"
                     />
@@ -236,7 +251,8 @@ function Store() {
                   <div className="p-4 space-y-2">
                     <div className="flex justify-between items-start">
                       <h3 className="font-semibold">{product.name}</h3>
-                      <Badge variant="secondary">{product.category}</Badge>
+                      <Badge variant="secondary">
+                        <Box />{product.unitsPerBox}</Badge>
                     </div>
                     <p className="text-2xl font-bold">₹{product.price}</p>
                     <Button 
@@ -265,12 +281,12 @@ function Store() {
               cart={cart}
               removeFromCart={removeFromCart}
               updateQuantity={updateQuantity}
-              totalAmount={totalAmount}
             />
           </Card>
         </div>
       </div>
     </div>
+    </>
   );
 }
 

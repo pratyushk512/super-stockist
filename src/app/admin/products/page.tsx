@@ -50,6 +50,9 @@ function App() {
   const handleStoreClick = () => {
     router.push('/admin/products/store');
   }
+  const handleNewProductClick = () => {
+    router.push('/admin/products/new-product');
+  }
 
   const [searchTerm, setSearchTerm] = useState('');
   const [sortConfig, setSortConfig] = useState<{
@@ -144,6 +147,7 @@ function App() {
               <Button
                 variant="outline"
                 className="w-full h-full min-h-[100px] flex flex-col gap-2"
+                onClick={handleNewProductClick}
               >
                 <PackagePlus className="h-6 w-6" />
                 <span>Add new Product</span>
@@ -240,7 +244,7 @@ function App() {
                         <tr key={product._id} className="border-b hover:bg-muted/50">
                           <td className="px-3 py-2 align-middle text-sm">{product.name}</td>
                           <td className="px-3 py-2 align-middle text-sm">{product.category}</td>
-                          <td className="px-3 py-2 align-middle text-sm">₹{parseFloat(product.price)}</td>
+                          <td className="px-3 py-2 align-middle text-sm">₹{parseFloat(product.price).toFixed(2)}</td>
                           <td className="px-3 py-2 align-middle text-sm">{product.unitsSold}</td>
                           <td className="px-3 py-2 align-middle text-sm">{product.currStock}</td>
                           <td className="px-3 py-2 align-middle">
