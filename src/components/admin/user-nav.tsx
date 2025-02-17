@@ -1,5 +1,4 @@
 "use client"
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import {
@@ -11,8 +10,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { useToast } from "@/hooks/use-toast"
+import { useRouter } from "next/navigation"
+import { title } from "process"
 
 export function UserNav() {
+  const router = useRouter()
+  const {toast}=useToast()
+  const handleLogout = () => {
+    fetch("api/users/logout")
+    toast({
+      title: "Logged out successfully",})
+    router.push("/admin")
+  }
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -36,7 +46,7 @@ export function UserNav() {
           <DropdownMenuItem>Settings</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Log out</DropdownMenuItem>
+        <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )
