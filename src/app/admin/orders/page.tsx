@@ -85,6 +85,7 @@ export default function OrdersTable() {
                     </div>
                     <Button
                         variant="outline"
+                        onClick={() => router.push("/admin/products/store")}
                     >
                         New Order
                     </Button>

@@ -31,3 +31,13 @@ export type Product = {
   unitsPerBox: number;
   unitsSold: number;
 };
+
+export type Customer = {
+  _id: string;
+  salesmanId: string;
+  customerName: string;
+  phone: number;
+  email: string;
+  address: string;
+  unicode: string;
+};

@@ -9,6 +9,7 @@ export async function POST(request: NextRequest){
     try {
         const reqBody = await request.json()
         const {salesman, customerName, phone, email,address} = reqBody
+        console.log(reqBody);
         const salesmanId = await User.findOne({username:salesman})
         console.log(salesmanId);
 
