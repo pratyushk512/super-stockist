@@ -12,10 +12,11 @@ export async function POST(request: NextRequest) {
   try {
     const loggedInUser: any = await getDataFromToken(request);
     const reqBody = await request.json();
-    const { phone, orderDate, status, totalAmount, items } = reqBody;
-    console.log("Request body:", reqBody);
+    const order=reqBody;
+    const {customerId,orderDate,totalAmount,items } = order;
+    console.log(order);
 
-    if (!phone || !orderDate || !status || !totalAmount || !items) {
+    if (!customerId || !orderDate || !totalAmount || !items) {
       return NextResponse.json(
         { error: "All fields are required" },
         { status: 400 }
@@ -26,7 +27,9 @@ export async function POST(request: NextRequest) {
       name: user.fullName,
       userType: user.userType,
     };
-    const customer = await Customer.findOne({ phone })
+
+    console.log("User:", user);
+    const customer = await Customer.findById(customerId);
     if (!customer) {
       return NextResponse.json(
         { error: "Customer not found" },
@@ -34,7 +37,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-   
+   console.log("Customer:", customer);
     const counter = await Counter.findOneAndUpdate(
       { _id: "orderNumber" },
       { $inc: { seq: 1 } },
@@ -42,11 +45,13 @@ export async function POST(request: NextRequest) {
     );
 
     const newOrder = new Order({
-      orderNumber: counter.seq,
+      orderNo: counter.seq,
+      invoiceNo:0,
       customerId: customer._id,
       customerName: customer.customerName,
       orderDate,
-      status,
+      status:"pending",
+      paymentStatus: "pending",
       totalAmount,
       items,
       createdBy,

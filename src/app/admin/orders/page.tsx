@@ -10,15 +10,15 @@ import { ThemeToggle } from "@/components/theme-toggle"
 import { MainNav } from "@/components/admin/main-nav"
 import { Search } from "@/components/admin/search"
 import { UserNav } from "@/components/admin/user-nav"
-import { Order } from "@/types/types"
+import { Order, OrderStatus } from "@/types/types"
 import { useOrdersStore } from "@/store/ordersStore"
 import Loader from "@/components/Loader"
 
-const statusColors = {
+const statusColors: { [key in OrderStatus]: string } = {
     pending: "bg-yellow-500/10 text-yellow-500",
-    packed: "bg-blue-500/10 text-blue-500",
-    paid: "bg-green-500/10 text-green-500",
     cancelled: "bg-red-500/10 text-red-500",
+    dispatched: "bg-green-500/10 text-green-500",
+    approved: "bg-purple-500/10 text-purple-500",
 }
 
 export default function OrdersTable() {
@@ -38,7 +38,7 @@ export default function OrdersTable() {
 
     const filteredOrders = Array.isArray(orders)
         ? orders.filter((order) =>
-            order.orderNumber.toString().includes(filters.orderNo) &&
+            order.orderNo.toString().includes(filters.orderNo) &&
             order.status.toLowerCase().includes(filters.status.toLowerCase()) &&
             order.customerName.toLowerCase().includes(filters.customerName.toLowerCase()) &&
             order.orderDate.includes(filters.orderDate)
@@ -133,8 +133,8 @@ export default function OrdersTable() {
                         </TableHeader>
                         <TableBody>
                             {filteredOrders.map((order) => (
-                                <TableRow key={order.orderNumber}>
-                                    <TableCell className="font-medium">{order.orderNumber}</TableCell>
+                                <TableRow key={order.orderNo}>
+                                    <TableCell className="font-medium">{order.orderNo}</TableCell>
                                     <TableCell>
                                         <Badge variant="secondary" className={statusColors[order.status]}>
                                             {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
@@ -148,7 +148,7 @@ export default function OrdersTable() {
                                         <Button 
                                             variant="outline" 
                                             size="sm" 
-                                            onClick={() => handleViewOrder(order.orderNumber.toString())}
+                                            onClick={() => handleViewOrder(order.orderNo.toString())}
                                         >
                                             View Order
                                         </Button>

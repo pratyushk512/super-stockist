@@ -6,6 +6,10 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: [true, "Product name is required"],
     },
+    hsn:{
+      type: String,
+      required: [true, "HSN is required"],
+    },
     description: {
       type: String,
     },
@@ -30,6 +34,11 @@ const productSchema = new mongoose.Schema(
     currStock: {
       type: Number,
       required: [true, "Stock quantity is required"],
+    },
+    image: {
+      type: String,
+      required: [true, "Product image is required"],
+      default: "D:\Coding\Super\super-stockist\public\placeholder.png.png",
     },
   },
   { timestamps: true }

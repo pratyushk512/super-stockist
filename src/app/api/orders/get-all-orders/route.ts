@@ -4,6 +4,10 @@ import { NextResponse } from "next/server";
 connectDB()
 export async function GET() {
     const orders = await Order.find({});
+    const formattedOrders = orders.map((order) => ({
+        ...order.toObject(),
+        totalAmount:order.totalAmount.toString(),
+      }));
     return NextResponse.json({
         orders,
     });

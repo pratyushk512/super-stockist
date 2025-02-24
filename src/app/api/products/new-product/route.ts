@@ -7,9 +7,9 @@ connectDB()
 export async function POST(request: NextRequest){
     try {
         const reqBody = await request.json()
-        const {name, description, price, unitsPerBox, category,currStock} = reqBody
+        const {name,hsn, description, price, unitsPerBox, category,currStock} = reqBody
         console.log(reqBody);
-        if(!name || !description || !price || !category || !currStock || !unitsPerBox){
+        if(!name ||!hsn ||  !description || !price || !category || !currStock || !unitsPerBox){
             return NextResponse.json({error: "All fields are required"}, {status: 400})
         }
         const product = await Product.findOne({name})
@@ -20,6 +20,7 @@ export async function POST(request: NextRequest){
         
         const newProduct = new Product({
             name,
+            hsn,
             description,
             price,
             category,

@@ -9,9 +9,14 @@ const orderSchema = new mongoose.Schema({
     type: String,
     required: [true, "Customer name is required"],
   },
-  orderNumber: {
+  orderNo: {
     type: Number,
     required: [true, "Order number is required"],
+  },
+  invoiceNo: {
+    type: Number,
+    required: [true, "Invoice number is required"],
+    default: 0,
   },
   orderDate: {
     type: Date,
@@ -19,7 +24,12 @@ const orderSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["pending", "packed", "paymentPending","paid","cancelled"],
+    enum: ["pending", "approved", "dispatched",  "cancelled"],
+    default: "pending",
+  },
+  paymentStatus: {
+    type: String,
+    enum: ["paid", "pending","cancelled"],
     default: "pending",
   },
   totalAmount: {
@@ -32,6 +42,14 @@ const orderSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Product",
         required: true,
+      },
+      productName: {
+        type: String,
+        required: [true, "Product name is required"],
+      },
+      hsn:{
+        type: String,
+        required: [true, "HSN is required"],
       },
       quantity: {
         type: Number,

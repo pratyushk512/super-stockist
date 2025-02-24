@@ -1,18 +1,24 @@
-export type OrderItem = {
+export type OrderItem={
   productId: string;
+  productName: string;
+  hsn: string;
   quantity: number;
-  priceAtTime: number;
-  total: number;
+  priceAtTime: string;
+  total: string;
 };
 
-export type OrderStatus = "pending" | "packed" | "paid" | "cancelled";
+export type OrderStatus = "pending" | "approved" | "dispatched" | "cancelled";
+
+export type PaymentStatus = "pending" | "paid" | "cancelled";
 
 export type Order = {
   customerId: string;
   customerName: string;
-  orderNumber: number;
+  orderNo: number;
+  invoiceNo: number;
   orderDate: string;
   status: OrderStatus;
+  paymentStatus: PaymentStatus;
   totalAmount: number;
   items: OrderItem[];
   createdBy: {
@@ -24,12 +30,14 @@ export type Order = {
 export type Product = {
   _id: string;
   name: string;
+  hsn: string;
   description: string;
   price: string;
   category: string;
   currStock: number;
   unitsPerBox: number;
   unitsSold: number;
+  image: string;
 };
 
 export type Customer = {

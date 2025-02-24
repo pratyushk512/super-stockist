@@ -21,12 +21,14 @@ import { MainNav } from "@/components/admin/main-nav";
 import { Search } from "@/components/admin/search";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { UserNav } from "@/components/admin/user-nav";
+import { createOrderByAdmins } from "@/utils/createOrderByAdmins";
+import { DrawerDialog } from "@/components/admin/checkout";
 
-
-interface CartItem {
+export interface CartItem {
   _id: string;
   name: string;
   description: string;
+  hsn: string;
   price: string;
   category: string;
   currStock: number;
@@ -36,12 +38,14 @@ interface CartItem {
   totalAmount: number;
 }
 
+
 function CartContent({ cart, removeFromCart, updateQuantity }: {
   cart: CartItem[];
   removeFromCart: (id: string) => void;
   updateQuantity: (id: string, delta: number) => void;
 }) {
   const [totalAmount, setTotalAmount] = useState(0);
+
   useMemo(() => {
     const total = cart.reduce((sum, item) => sum + (parseFloat(item.price) * item.quantity), 0);
     setTotalAmount(total);
@@ -103,13 +107,12 @@ function CartContent({ cart, removeFromCart, updateQuantity }: {
           <span className="font-semibold">Total:</span>
           <span className="text-2xl font-bold">₹{totalAmount.toFixed(2)}</span>
         </div>
-        <Button className="w-full" disabled={cart.length === 0}>
-          Checkout
-        </Button>
+        <DrawerDialog cart={cart} totalAmount={totalAmount.toString()}/>
       </div>
     </div>
   );
 }
+
 
 function Store() {
   const {products,fetchProducts} = useProductStore();
