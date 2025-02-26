@@ -4,8 +4,9 @@ import { NextRequest,NextResponse } from "next/server";
 connectDB()
 export async function POST(request: NextRequest) {
     const reqBody = await request.json();
-    const { orderNumber } = reqBody;
-    const order = await Order.findOne({orderNumber});
+    const { orderNo } = reqBody;
+    const order = await Order.findOne({orderNo});
+    console.log(orderNo);
     const formattedOrder ={
         ...order.toObject(),
         totalAmount:order.totalAmount.toString(),

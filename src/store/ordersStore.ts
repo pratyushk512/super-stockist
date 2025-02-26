@@ -38,8 +38,8 @@ export const useOrdersStore = create<OrdersState>((set, get) => ({
 
   getAllOrders: () => get().orders,
 
-  getOrderById: (orderNumber: number) =>
-    get().orders.find((order) => order.orderNumber === orderNumber),
+  getOrderById: (orderNo: number) =>
+    get().orders.find((order) => order.orderNo === orderNo),
 
   getOrdersByCustomerId: (customerId: string) =>
     get().orders.filter((order) => order.customerId === customerId),

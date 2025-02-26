@@ -45,8 +45,9 @@ export default function OrdersTable() {
         )
         : []
 
-    const handleViewOrder = (orderId: string) => {
-        router.push(`/admin/orders/${orderId}`)
+    const handleViewOrder = (orderNo: number) => {
+        console.log("View Order:", orderNo)
+        router.push(`/admin/orders/${orderNo}`)
     }
 
     if (isLoading) {
@@ -148,7 +149,7 @@ export default function OrdersTable() {
                                         <Button 
                                             variant="outline" 
                                             size="sm" 
-                                            onClick={() => handleViewOrder(order.orderNo.toString())}
+                                            onClick={() => handleViewOrder(order.orderNo)}
                                         >
                                             View Order
                                         </Button>
