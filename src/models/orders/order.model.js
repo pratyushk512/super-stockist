@@ -13,24 +13,14 @@ const orderSchema = new mongoose.Schema({
     type: Number,
     required: [true, "Order number is required"],
   },
-  invoiceNo: {
-    type: Number,
-    required: [true, "Invoice number is required"],
-    default: 0,
-  },
   orderDate: {
     type: Date,
     default: Date.now,
   },
   status: {
     type: String,
-    enum: ["pending", "approved", "dispatched",  "cancelled"],
-    default: "pending",
-  },
-  paymentStatus: {
-    type: String,
-    enum: ["paid", "pending","cancelled"],
-    default: "pending",
+    enum: ["Pending","Completed","Cancelled"],
+    default: "Pending",
   },
   totalAmount: {
     type: mongoose.Types.Decimal128,

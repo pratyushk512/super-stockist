@@ -27,7 +27,8 @@ import { CartItem } from "@/app/admin/products/store/page";
 import { createOrderByAdmins } from "@/utils/createOrderByAdmins";
 import CustomerSearch from "./select-customer";
 import { Customer } from "@/types/types";
-
+import { useToast } from "@/hooks/use-toast"
+import { useRouter } from "next/navigation";
 function useMediaQuery(query: string) {
   const [matches, setMatches] = useState(false);
 
@@ -50,7 +51,9 @@ export function DrawerDialog({ cart, totalAmount }: { cart: CartItem[], totalAmo
 
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
   const [date, setDate] = useState("");
-
+  const { toast } = useToast()
+    const router = useRouter();
+    
   const handleCheckout =async () => {
     if (!selectedCustomer || !date) {
       console.error("Customer or date is missing");
@@ -62,12 +65,20 @@ export function DrawerDialog({ cart, totalAmount }: { cart: CartItem[], totalAmo
       orderDate: date,
       totalAmount: totalAmount
     };
-
+    
     const order =await createOrderByAdmins(cart, orderDetails);
     if(order){
+      toast({
+        title:"Order Created Successfully"
+      })
+      router.push("/admin/orders");
       console.log("Order created successfully", order);
     }
     else{
+      toast({
+        title:"Error creating order",
+        variant:"destructive"
+      })
       console.error("Error creating order");
     }
   };

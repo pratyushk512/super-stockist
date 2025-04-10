@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     const orderNumber = counter.seq;
 
     const newOrder = new Order({
-      orderNumber,
+      orderNo: orderNumber,
       customerId: loggedInUser.id,
       customerName: user.customerName,
       orderDate,

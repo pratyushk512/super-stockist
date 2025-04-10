@@ -10,11 +10,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Loader from "@/components/Loader";
 import { Order, OrderItem } from "@/types/types";
+import { title } from "process";
+import { useToast } from "@/hooks/use-toast";
+import { RainbowButton } from "@/components/magicui/rainbow-button";
 
 export default function OrderDisplay({ orderNo }: { orderNo: number }) {
     const [order, setOrder] = useState<Order | null>(null);
     const [editMode, setEditMode] = useState(false);
     const [editedOrder, setEditedOrder] = useState<Partial<Order>>({});
+    const {toast}=useToast()
 
     useEffect(() => {
         const fetchOrder = async () => {
@@ -40,6 +44,13 @@ export default function OrderDisplay({ orderNo }: { orderNo: number }) {
     }, [editedOrder]);
 
     const handleEdit = () => {
+        if(order?.status==="Completed" || order?.status==="Cancelled"){
+            toast({
+                title: "Cannot edit completed or cancelled orders",
+                variant: "destructive",
+            });
+            return;
+        }
         if (order) {
             setEditedOrder({ ...order });
         }
@@ -103,6 +114,35 @@ export default function OrderDisplay({ orderNo }: { orderNo: number }) {
         });
     };
 
+    const handleGenerateInvoice = async () => {
+        const gstAmount = (order?.totalAmount ?? 0) * 0.18;
+        const totalAmount = (order?.totalAmount ?? 0) + gstAmount;
+        const invoiceRequest = {
+            invoiceDate: new Date(),
+            orderId: order?._id,
+            gstAmount,
+            gstPercentage: 0.18,
+            totalAmount,
+        };
+        const invoice= await fetch(`/api/invoices/generate-invoice`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(invoiceRequest),
+        })
+        if (!invoice.ok) {
+            toast({
+                title: "Error generating invoice",
+                variant: "destructive",
+            });
+            return;
+        }
+        else{
+            toast({
+                title: "Invoice generated successfully",
+                variant: "default",
+            });
+        }
+    }
     if (!order) return <Loader />;
 
     return (
@@ -149,10 +189,8 @@ export default function OrderDisplay({ orderNo }: { orderNo: number }) {
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="pending">Pending</SelectItem>
-                                <SelectItem value="packed">Packed</SelectItem>
-                                <SelectItem value="paymentPending">Payment Pending</SelectItem>
-                                <SelectItem value="paid">Paid</SelectItem>
-                                <SelectItem value="cancelled">Cancelled</SelectItem>
+                                <SelectItem value="Completed">Completed</SelectItem>
+                                <SelectItem value="Cancelled">Cancelled</SelectItem>
                             </SelectContent>
                         </Select>
                     ) : (
@@ -225,6 +263,9 @@ export default function OrderDisplay({ orderNo }: { orderNo: number }) {
                 <p>
                     {order.createdBy.name} ({order.createdBy.userType})
                 </p>
+            </div>
+            <div className="flex justify-center mt-20">
+                <RainbowButton onClick={handleGenerateInvoice}>Generate Invoice</RainbowButton>
             </div>
         </div>
     );

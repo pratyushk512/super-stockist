@@ -7,18 +7,17 @@ export type OrderItem={
   total: string;
 };
 
-export type OrderStatus = "pending" | "approved" | "dispatched" | "cancelled";
+export type OrderStatus = "Pending" | "Completed" | "Cancelled";
 
-export type PaymentStatus = "pending" | "paid" | "cancelled";
+export type PaymentStatus = "Paid" | "Unpaid";
 
 export type Order = {
+  _id: string;
   customerId: string;
   customerName: string;
   orderNo: number;
-  invoiceNo: number;
   orderDate: string;
   status: OrderStatus;
-  paymentStatus: PaymentStatus;
   totalAmount: number;
   items: OrderItem[];
   createdBy: {
@@ -49,3 +48,14 @@ export type Customer = {
   address: string;
   unicode: string;
 };
+
+export type Invoice = {
+  _id: string;
+  invoiceNumber:string;
+  invoiceDate:string;
+  orderId: string;
+  paymentStatus:PaymentStatus;
+  totalAmount:string;
+  gstAmount:string;
+  gstPercentage:number;
+}
