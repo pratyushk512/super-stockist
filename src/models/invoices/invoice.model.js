@@ -10,6 +10,10 @@ const invoiceSchema = new mongoose.Schema({
     default: Date.now,
     required: [true, "Invoice date is required"],
   },
+  customerName: {
+    type: String,
+    required: [true, "Customer name is required"],
+  },
   orderId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Order",

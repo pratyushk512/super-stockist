@@ -53,6 +53,7 @@ export type Invoice = {
   _id: string;
   invoiceNumber:string;
   invoiceDate:string;
+  customerName:string;
   orderId: string;
   paymentStatus:PaymentStatus;
   totalAmount:string;

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { Edit2, Save } from "lucide-react";
-
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -19,7 +19,51 @@ export default function OrderDisplay({ orderNo }: { orderNo: number }) {
     const [editMode, setEditMode] = useState(false);
     const [editedOrder, setEditedOrder] = useState<Partial<Order>>({});
     const {toast}=useToast()
-
+    const router=useRouter()
+    const handleGenerateInvoice = async () => {
+        if (order?.status === "Completed" || order?.status === "Cancelled") {
+            toast({
+                title: "Cannot generate invoice for completed or cancelled orders",
+                variant: "destructive",
+            });
+            return;
+        }
+    
+        const baseAmount = Number(order?.totalAmount ?? 0); 
+        const gstAmount = baseAmount * 0.18;
+        const totalAmount = baseAmount + gstAmount;
+    
+        const invoiceRequest = {
+            invoiceDate: new Date(),
+            orderId: order?._id,
+            gstAmount,
+            gstPercentage: 0.18,
+            totalAmount: Number(totalAmount.toFixed(2)), 
+        };
+    
+        console.log("Invoice Request:", invoiceRequest);
+    
+        const invoice = await fetch(`/api/invoices/generate-invoice`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(invoiceRequest),
+        });
+    
+        if (!invoice.ok) {
+            toast({
+                title: "Error generating invoice",
+                variant: "destructive",
+            });
+            router.refresh();
+            return;
+        } else {
+            toast({
+                title: "Invoice generated successfully",
+                variant: "default",
+            });
+        }
+    };
+    
     useEffect(() => {
         const fetchOrder = async () => {
             try {
@@ -37,7 +81,7 @@ export default function OrderDisplay({ orderNo }: { orderNo: number }) {
             }
         };
         fetchOrder();
-    }, [orderNo]);
+    }, [orderNo, order?.status]);
 
     useEffect(() => {
         console.log(editedOrder);
@@ -114,35 +158,7 @@ export default function OrderDisplay({ orderNo }: { orderNo: number }) {
         });
     };
 
-    const handleGenerateInvoice = async () => {
-        const gstAmount = (order?.totalAmount ?? 0) * 0.18;
-        const totalAmount = (order?.totalAmount ?? 0) + gstAmount;
-        const invoiceRequest = {
-            invoiceDate: new Date(),
-            orderId: order?._id,
-            gstAmount,
-            gstPercentage: 0.18,
-            totalAmount,
-        };
-        const invoice= await fetch(`/api/invoices/generate-invoice`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(invoiceRequest),
-        })
-        if (!invoice.ok) {
-            toast({
-                title: "Error generating invoice",
-                variant: "destructive",
-            });
-            return;
-        }
-        else{
-            toast({
-                title: "Invoice generated successfully",
-                variant: "default",
-            });
-        }
-    }
+    
     if (!order) return <Loader />;
 
     return (
