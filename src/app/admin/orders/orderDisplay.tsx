@@ -34,7 +34,7 @@ export default function OrderDisplay({ orderNo }: { orderNo: number }) {
         const totalAmount = baseAmount + gstAmount;
     
         const invoiceRequest = {
-            invoiceDate: new Date(),
+            invoiceDate: order?.orderDate,
             orderId: order?._id,
             gstAmount,
             gstPercentage: 0.18,

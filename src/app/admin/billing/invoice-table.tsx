@@ -16,7 +16,7 @@ import { Eye, Printer, Search } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { useInvoicesStore } from "@/store/invoiceStore"
 import Loader from "@/components/Loader"
-
+import { useRouter } from "next/navigation"
 export function InvoiceTable() {
   const [yearFilter, setYearFilter] = useState<string | undefined>(undefined)
   const [monthFilter, setMonthFilter] = useState<string | undefined>(undefined)
@@ -27,8 +27,8 @@ export function InvoiceTable() {
   const { invoices, isLoading, error, fetchInvoices } = useInvoicesStore()
 
   const [currentPage, setCurrentPage] = useState(1)
-  const pageSize = 50
-
+  const pageSize = 10
+  const router= useRouter()
   useEffect(() => {
     fetchInvoices()
   }, [])
@@ -83,6 +83,11 @@ export function InvoiceTable() {
 
   const handlePrev = () => {
     if (currentPage > 1) setCurrentPage((prev) => prev - 1)
+  }
+
+  const handleViewInvoice=(invoiceNo: string) => {
+    console.log("View Invoice:", invoiceNo)
+    router.push(`/admin/billing/${invoiceNo}`)
   }
 
   return (
@@ -160,7 +165,7 @@ export function InvoiceTable() {
                     <TableCell>{invoice.invoiceNumber}</TableCell>
                     <TableCell>{new Date(invoice.invoiceDate).toLocaleDateString()}</TableCell>
                     <TableCell>{invoice.customerName}</TableCell>
-                    <TableCell>${Number(invoice.totalAmount).toFixed(2)}</TableCell>
+                    <TableCell>₹{Number(invoice.totalAmount).toFixed(2)}</TableCell>
                     <TableCell>
                       <Badge
                         variant="secondary"
@@ -171,7 +176,7 @@ export function InvoiceTable() {
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">
-                        <Button size="sm" variant="outline" className="bg-yellow-600">
+                        <Button size="sm" variant="outline" className="bg-yellow-600" onClick={() => handleViewInvoice(invoice.invoiceNumber)}>
                           <Eye className="h-4 w-4 mr-1" />
                           View
                         </Button>

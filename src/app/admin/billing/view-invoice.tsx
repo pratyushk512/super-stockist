@@ -5,19 +5,19 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
-export default function InvoicePage() {
-  // Sample data - in a real app, this would come from a database or API
+export default function InvoicePage({invoiceNo}: { invoiceNo: string }) {
+  
   const invoiceData = {
     invoiceNumber: "INV-2023-0042",
     invoiceDate: "April 12, 2025",
     orderDate: "April 10, 2025",
     seller: {
-      name: "Acme Corporation",
-      address: "123 Business Avenue, Suite 500",
-      city: "San Francisco, CA 94107",
-      email: "accounts@acmecorp.com",
-      phone: "+1 (555) 123-4567",
-      taxId: "TAX-ID: 98-7654321",
+      name: "JN Traders",
+      address: "Bye Lane,West Market Road,Upper Bazar",
+      city: "Ranchi,Jharkhand, 834001",
+      email: "",
+      phone: "+91 9431596720",
+      taxId: "GSTIN: 20AABCU1234C1Z5",
     },
     customer: {
       name: "John Smith",
@@ -63,7 +63,7 @@ export default function InvoicePage() {
     ],
     subtotal: 2299.49,
     taxDetails: [
-      { name: "GST (9%)", amount: 206.95 },
+      { name: "SGST (9%)", amount: 206.95 },
       { name: "CGST (9%)", amount: 206.95 },
     ],
     total: 2713.39,
@@ -78,7 +78,7 @@ export default function InvoicePage() {
         {/* Header with actions */}
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600">
-            Invoice
+            Tax Invoice
           </h1>
           <div className="flex gap-2">
             <Button variant="outline" size="sm" className="border-purple-200 hover:bg-purple-50">
@@ -174,9 +174,9 @@ export default function InvoicePage() {
                   <TableCell className="text-center font-medium text-gray-500">{index + 1}</TableCell>
                   <TableCell className="font-medium">{item.name}</TableCell>
                   <TableCell className="text-gray-600">{item.hsnCode}</TableCell>
-                  <TableCell className="text-right">${item.price.toFixed(2)}</TableCell>
+                  <TableCell className="text-right">₹{item.price.toFixed(2)}</TableCell>
                   <TableCell className="text-right">{item.quantity}</TableCell>
-                  <TableCell className="text-right font-medium">${item.amount.toFixed(2)}</TableCell>
+                  <TableCell className="text-right font-medium">₹{item.amount.toFixed(2)}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -185,14 +185,14 @@ export default function InvoicePage() {
                 <TableCell colSpan={5} className="text-right font-medium">
                   Subtotal
                 </TableCell>
-                <TableCell className="text-right">${invoiceData.subtotal.toFixed(2)}</TableCell>
+                <TableCell className="text-right">₹{invoiceData.subtotal.toFixed(2)}</TableCell>
               </TableRow>
               {invoiceData.taxDetails.map((tax, index) => (
                 <TableRow key={index} className="bg-gray-50 hover:bg-gray-50">
                   <TableCell colSpan={5} className="text-right font-medium">
                     {tax.name}
                   </TableCell>
-                  <TableCell className="text-right">${tax.amount.toFixed(2)}</TableCell>
+                  <TableCell className="text-right">₹{tax.amount.toFixed(2)}</TableCell>
                 </TableRow>
               ))}
               <TableRow className="bg-gradient-to-r from-purple-100 to-pink-100 hover:from-purple-100 hover:to-pink-100">
@@ -200,7 +200,7 @@ export default function InvoicePage() {
                   Total
                 </TableCell>
                 <TableCell className="text-right font-bold text-lg text-purple-700">
-                  ${invoiceData.total.toFixed(2)}
+                ₹{invoiceData.total.toFixed(2)}
                 </TableCell>
               </TableRow>
             </TableFooter>
@@ -218,32 +218,21 @@ export default function InvoicePage() {
           <Card className="p-6 border-none shadow-md bg-white">
             <h3 className="font-semibold text-purple-600 mb-3">Payment Details</h3>
             <p className="text-sm text-gray-600">
-              <span className="font-medium text-gray-700">Bank:</span> National Bank
+              <span className="font-medium text-gray-700">Bank:</span> Union Bank of India
               <br />
-              <span className="font-medium text-gray-700">Account Name:</span> Acme Corporation
+              <span className="font-medium text-gray-700">Account Name:</span> JN Traders
               <br />
               <span className="font-medium text-gray-700">Account Number:</span> XXXX-XXXX-XXXX-1234
               <br />
-              <span className="font-medium text-gray-700">SWIFT/BIC:</span> NTBKUS12
+              <span className="font-medium text-gray-700">IFSC Code:</span> NTBKUS12
             </p>
           </Card>
         </div>
 
         {/* Footer */}
-        <footer className="text-center text-sm text-gray-500 bg-white p-6 rounded-lg shadow-md border-none">
-          <p>
-            If you have any questions about this invoice, please contact
-            <br />
-            <Link href="mailto:billing@acmecorp.com" className="text-purple-600 hover:text-purple-700 hover:underline">
-              billing@acmecorp.com
-            </Link>
-            {" or "}
-            <Link href="tel:+15551234567" className="text-purple-600 hover:text-purple-700 hover:underline">
-              +1 (555) 123-4567
-            </Link>
-          </p>
-          <div className="mt-4 text-xs text-gray-400">
-            Invoice generated on {invoiceData.invoiceDate} • Acme Corporation © 2025
+        <footer className="text-center text-sm text-gray-500 p-6 rounded-lg shadow-md border-none">
+          <div className=" text-xs text-gray-400">
+            Invoice generated on {invoiceData.invoiceDate} • JN Traders © 2025
           </div>
         </footer>
       </div>
