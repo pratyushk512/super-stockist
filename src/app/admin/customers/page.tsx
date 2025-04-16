@@ -56,7 +56,7 @@ function App() {
   const filteredAndSortedCustomers = useMemo(() => {
     console.log("filter :", customers);
     let filtered = customers.filter((cust) =>
-      cust.customerName.toLowerCase().includes(searchTerm.toLowerCase())
+      cust.companyName.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     // if (sortConfig.key) {
@@ -207,7 +207,7 @@ function App() {
                       {filteredAndSortedCustomers.map((cust) => (
                         <tr key={cust._id} className="border-b hover:bg-muted/50">
                           <td className="px-3 py-2 align-middle text-sm">{cust._id}</td>
-                          <td className="px-3 py-2 align-middle text-sm">{cust.customerName}</td>
+                          <td className="px-3 py-2 align-middle text-sm">{cust.companyName}</td>
                           <td className="px-3 py-2 align-middle text-sm">{cust.phone}</td>
                           <td className="px-3 py-2 align-middle text-sm">{cust.email}</td>
                           <td className="px-3 py-2 align-middle text-sm">{cust.address}</td>

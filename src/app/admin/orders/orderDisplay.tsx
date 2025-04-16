@@ -48,7 +48,7 @@ export default function OrderDisplay({ orderNo }: { orderNo: number }) {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(invoiceRequest),
         });
-    
+        
         if (!invoice.ok) {
             toast({
                 title: "Error generating invoice",
@@ -57,10 +57,14 @@ export default function OrderDisplay({ orderNo }: { orderNo: number }) {
             router.refresh();
             return;
         } else {
+            const invoiceData= await invoice.json();
+            console.log("Invoice Data:", invoiceData);
+            const invoiceNo = invoiceData.savedInvoice.invoiceNumber;
             toast({
                 title: "Invoice generated successfully",
                 variant: "default",
             });
+            router.push(`/admin/billing/${invoiceNo}`);
         }
     };
     
