@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
     const newOrder = new Order({
       orderNo: counter.seq,
       customerId: customer._id,
-      customerName: customer.customerName,
+      companyName: customer.companyName,
       orderDate,
       status:"Pending",
       totalAmount,

@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
       //     { status: 400 }
       //   );
       // }
-      product.stock -= item.quantity;
+      product.currStock -= item.quantity;
       product.unitsSold += item.quantity;
       await product.save();
     }
@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
     const invoiceNumber = await generateUniqueInvoiceNumber();
     const newInvoice = new Invoice({
       invoiceNumber,
-      customerName: order.customerName,
+      companyName: order.companyName,
       orderId,
       invoiceDate,
       gstAmount,
@@ -69,7 +69,6 @@ export async function POST(request: NextRequest) {
 
     const savedInvoice = await newInvoice.save();
     console.log("Saved Invoice:", savedInvoice);
-    
     order.status = "Completed";
     await order.save();
     return NextResponse.json(

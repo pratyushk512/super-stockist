@@ -14,7 +14,7 @@ export type PaymentStatus = "Paid" | "Unpaid";
 export type Order = {
   _id: string;
   customerId: string;
-  customerName: string;
+  companyName: string;
   orderNo: number;
   orderDate: string;
   status: OrderStatus;
@@ -41,19 +41,20 @@ export type Product = {
 
 export type Customer = {
   _id: string;
-  salesmanId: string;
-  customerName: string;
-  phone: number;
-  email: string;
+  ownerName: string;
+  companyName: string;
   address: string;
-  unicode: string;
+  city: string;
+  email: string;
+  phone: string;
+  gstIn: string;
 };
 
 export type Invoice = {
   _id: string;
   invoiceNumber:string;
   invoiceDate:string;
-  customerName:string;
+  companyName:string;
   orderId: string;
   paymentStatus:PaymentStatus;
   totalAmount:string;

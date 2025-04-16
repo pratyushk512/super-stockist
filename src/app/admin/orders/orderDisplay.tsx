@@ -179,7 +179,7 @@ export default function OrderDisplay({ orderNo }: { orderNo: number }) {
             <div className="grid grid-cols-2 gap-4">
                 <div>
                     <label className="block text-sm font-medium text-gray-700">Customer Name</label>
-                    <p>{order.customerName}</p>
+                    <p>{order.companyName}</p>
                 </div>
                 <div>
                     <label className="block text-sm font-medium text-gray-700">Order Date</label>

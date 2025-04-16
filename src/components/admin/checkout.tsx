@@ -152,7 +152,7 @@ export default function OrderDetailsForm({
       <div className="grid gap-2">
         <Label>Select Customer</Label>
         <CustomerSearch onSelectCustomer={setSelectedCustomer} />
-        <p>{selectedCustomer ? selectedCustomer.customerName : "No customer selected"}</p>
+        <p>{selectedCustomer ? selectedCustomer.companyName : "No customer selected"}</p>
       </div>
       <div className="grid gap-2">
         <Label>Date</Label>

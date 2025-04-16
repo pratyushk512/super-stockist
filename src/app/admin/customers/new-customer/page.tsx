@@ -15,17 +15,19 @@ import { error } from "console";
 export default function CustomerForm() {
     const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm({
         defaultValues: {
-            customerName: "",
-            phone: "",
-            email: "",
+            ownerName: "",
+            companyName: "",
             address: "",
-          salesman: "",
+            city: "",
+            gstIn: "",
+            email: "",
+            phone: "",
         },
       });
       
     const { toast } = useToast()
 
-    const salesman = ["sales1", "sales2", "sales3"]
+    
     const onSubmit = async (data: any) => {
         console.log(data);
         const response = await fetch("/api/users/create-customer", {
@@ -68,9 +70,14 @@ export default function CustomerForm() {
                 <CardContent>
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                         <div>
-                            <Label>Customer Name</Label>
-                            <Input {...register("customerName", { required: "Customer name is required" })} />
-                            {errors.customerName && <p className="text-red-500">{String(errors.customerName.message)}</p>}
+                            <Label>Owner Name</Label>
+                            <Input {...register("ownerName", { required: "Customer name is required" })} />
+                            {errors.ownerName && <p className="text-red-500">{String(errors.ownerName.message)}</p>}
+                        </div>
+                        <div>
+                            <Label>Company Name</Label>
+                            <Input {...register("companyName", { required: "Company name is required" })} />
+                            {errors.companyName && <p className="text-red-500">{String(errors.companyName.message)}</p>}
                         </div>
                         <div>
                             <Label>Phone No.</Label>
@@ -86,19 +93,13 @@ export default function CustomerForm() {
                             <Input type="string" {...register("address", { required: "Address is required" })} />
                         </div>
                         <div>
-                            <Label>Select Salesman</Label>
-                            <Select onValueChange={(value) => setValue("salesman", value, { shouldValidate: true })}>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Select salesman" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {salesman.map((cat) => (
-                                        <SelectItem key={cat} value={cat}>{cat}</SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                            {errors.salesman && <p className="text-red-500">{String(errors.salesman.message)}</p>}
-
+                            <Label>City</Label>
+                            <Input type="string" {...register("city", { required: "City is required" })} />
+                        </div>
+                        <div>
+                            <Label>GSTIN</Label>
+                            <Input type="string" {...register("gstIn", { required: "GSTIN is required" })} />
+                            {errors.gstIn && <p className="text-red-500">{String(errors.gstIn.message)}</p>}
                         </div>
                         <Button type="submit">Add Customer</Button>
                     </form>

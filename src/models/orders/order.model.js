@@ -5,9 +5,9 @@ const orderSchema = new mongoose.Schema({
     ref: "Customer",
     required: [true, "Customer ID is required"],
   },
-  customerName: {
+  companyName: {
     type: String,
-    required: [true, "Customer name is required"],
+    required: [true, "Company name is required"],
   },
   orderNo: {
     type: Number,

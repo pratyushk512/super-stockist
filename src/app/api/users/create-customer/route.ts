@@ -8,34 +8,32 @@ connectDB()
 export async function POST(request: NextRequest){
     try {
         const reqBody = await request.json()
-        const {salesman, customerName, phone, email,address} = reqBody
+        const {ownerName, companyName, address, city,gstIn,email,phone} = reqBody
         console.log(reqBody);
-        const salesmanId = await User.findOne({username:salesman})
-        console.log(salesmanId);
 
         const user = await Customer.findOne({phone})
         
         if(user){
             return NextResponse.json({error: "User already exists"}, {status: 400})
         }
-        const unicode = Math.floor(1000 + Math.random() * 9000).toString();
 
-        const newUser = new Customer({
-            salesmanId:salesmanId._id,
-            customerName,
-            unicode,
-            phone,
-            email,
+        const newCustomer = new Customer({
+            ownerName,
+            companyName,
             address,
+            city,
+            gstIn,
+            email,
+            phone
         })
 
-        const savedUser = await newUser.save()
-        console.log(savedUser);
+        const savedCustomer = await newCustomer.save()
+        console.log(savedCustomer);
 
         return NextResponse.json({
             message: "Customer created successfully",
             success: true,
-            savedUser
+            savedCustomer
         })
         
     } catch (error: any) {

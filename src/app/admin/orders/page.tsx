@@ -39,7 +39,7 @@ export default function OrdersTable() {
         ? orders.filter((order) =>
             order.orderNo.toString().includes(filters.orderNo) &&
             order.status.toLowerCase().includes(filters.status.toLowerCase()) &&
-            order.customerName.toLowerCase().includes(filters.customerName.toLowerCase()) &&
+            order.companyName.toLowerCase().includes(filters.customerName.toLowerCase()) &&
             order.orderDate.includes(filters.orderDate)
         )
         : []
@@ -140,7 +140,7 @@ export default function OrdersTable() {
                                             {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                                         </Badge>
                                     </TableCell>
-                                    <TableCell>{order.customerName}</TableCell>
+                                    <TableCell>{order.companyName}</TableCell>
                                     <TableCell className="hidden sm:table-cell">
                                         {new Date(order.orderDate).toLocaleDateString()}
                                     </TableCell>

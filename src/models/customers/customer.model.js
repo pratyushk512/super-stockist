@@ -1,31 +1,33 @@
 import mongoose from "mongoose";
 
 const customerSchema = new mongoose.Schema({
-  salesmanId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: [true, "Salesman ID is required"],
-  },
-  customerName: {
+  ownerName: {
     type: String,
     required: [true, "Customer name is required"],
   },
-  unicode:{
+  companyName: {
     type: String,
-    required: [true, "Unicode is required"],
+    required: [true, "Company name is required"],
   },
-  phone: {
-    type: Number,
-    required: [true, "Phone number is required"],
+  address:{
+    type: String,
+    required: [true, "Address is required"],
+  },
+  city: {
+    type: String,
+    required: [true, "City is required"],
+  },
+  gstIn: {
+    type: String,
+    required: [true, "GSTIN is required"],
   },
   email: {
     type: String,
     required: [true, "Email is required"],
   },
-
-  address: {
+  phone: {
     type: String,
-    required: [true, "Region is required"],
+    required: [true, "Phone is required"],
   },
 });
 

@@ -66,7 +66,7 @@ export function InvoiceTable() {
     if (yearFilter && yearFilter !== "all" && invoiceYear !== yearFilter) return false
     if (monthFilter && monthFilter !== "all" && invoiceMonth !== monthFilter) return false
     if (dateFilter && invoiceDay !== dateFilter) return false
-    if (customerFilter && !invoice.customerName.toLowerCase().includes(customerFilter.toLowerCase())) return false
+    if (customerFilter && !invoice.companyName.toLowerCase().includes(customerFilter.toLowerCase())) return false
     if (statusFilter !== "all" && invoice.paymentStatus.toLowerCase() !== statusFilter.toLowerCase()) return false
   
     return true
@@ -164,7 +164,7 @@ export function InvoiceTable() {
                     <TableCell>{startIndex + index + 1}</TableCell>
                     <TableCell>{invoice.invoiceNumber}</TableCell>
                     <TableCell>{new Date(invoice.invoiceDate).toLocaleDateString()}</TableCell>
-                    <TableCell>{invoice.customerName}</TableCell>
+                    <TableCell>{invoice.companyName}</TableCell>
                     <TableCell>₹{Number(invoice.totalAmount).toFixed(2)}</TableCell>
                     <TableCell>
                       <Badge

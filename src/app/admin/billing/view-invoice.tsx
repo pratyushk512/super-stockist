@@ -1,76 +1,125 @@
+"use client";
 import { CalendarIcon, PrinterIcon, SaveIcon } from "lucide-react"
-import Link from "next/link"
-
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { useEffect, useState } from "react"
+import { OrderItem } from "@/types/types";
 
 export default function InvoicePage({invoiceNo}: { invoiceNo: string }) {
   
-  const invoiceData = {
-    invoiceNumber: "INV-2023-0042",
-    invoiceDate: "April 12, 2025",
-    orderDate: "April 10, 2025",
+  // const invoiceData = {
+  //   invoiceNumber: "INV-2023-0042",
+  //   invoiceDate: "April 12, 2025",
+  //   orderDate: "April 10, 2025",
+  //   seller: {
+  //     name: "JN Traders",
+  //     address: "Bye Lane,West Market Road,Upper Bazar",
+  //     city: "Ranchi,Jharkhand, 834001",
+  //     email: "",
+  //     phone: "+91 9431596720",
+  //     taxId: "GSTIN: 20AABCU1234C1Z5",
+  //   },
+  //   customer: {
+  //     company: "Smith Enterprises",
+  //     address: "456 Commerce Street",
+  //     city: "New York, NY 10001",
+  //     email: "john@smithenterprises.com",
+  //     phone: "+1 (555) 987-6543",
+  //     gstIn: "GSTIN: 20AABCU1234C1Z5",
+  //   },
+  //   items: [
+  //     {
+  //       id: 1,
+  //       name: "Premium Web Hosting (Annual)",
+  //       hsnCode: "9983",
+  //       price: 199.99,
+  //       quantity: 1,
+  //       amount: 199.99,
+  //     },
+  //     {
+  //       id: 2,
+  //       name: "Custom Website Development",
+  //       hsnCode: "9983",
+  //       price: 1500.0,
+  //       quantity: 1,
+  //       amount: 1500.0,
+  //     },
+  //     {
+  //       id: 3,
+  //       name: "SEO Package - Basic",
+  //       hsnCode: "9983",
+  //       price: 299.5,
+  //       quantity: 1,
+  //       amount: 299.5,
+  //     },
+  //     {
+  //       id: 4,
+  //       name: "Content Writing (per 1000 words)",
+  //       hsnCode: "9983",
+  //       price: 75.0,
+  //       quantity: 4,
+  //       amount: 300.0,
+  //     },
+  //   ],
+  //   subtotal: 2299.49,
+  //   taxDetails: [
+  //     { name: "SGST (9%)", amount: 206.95 },
+  //     { name: "CGST (9%)", amount: 206.95 },
+  //   ],
+  //   totalAmount: 2713.39,
+  // }
+  type InvoiceData = {
+    invoiceNumber: string;
+    invoiceDate: string;
+    orderDate: string;
     seller: {
-      name: "JN Traders",
-      address: "Bye Lane,West Market Road,Upper Bazar",
-      city: "Ranchi,Jharkhand, 834001",
-      email: "",
-      phone: "+91 9431596720",
-      taxId: "GSTIN: 20AABCU1234C1Z5",
-    },
+      name: string;
+      address: string;
+      city: string;
+      email: string;
+      phone: string;
+      taxId: string;
+    };
     customer: {
-      name: "John Smith",
-      company: "Smith Enterprises",
-      address: "456 Commerce Street",
-      city: "New York, NY 10001",
-      email: "john@smithenterprises.com",
-      phone: "+1 (555) 987-6543",
-    },
-    items: [
-      {
-        id: 1,
-        name: "Premium Web Hosting (Annual)",
-        hsnCode: "9983",
-        price: 199.99,
-        quantity: 1,
-        amount: 199.99,
-      },
-      {
-        id: 2,
-        name: "Custom Website Development",
-        hsnCode: "9983",
-        price: 1500.0,
-        quantity: 1,
-        amount: 1500.0,
-      },
-      {
-        id: 3,
-        name: "SEO Package - Basic",
-        hsnCode: "9983",
-        price: 299.5,
-        quantity: 1,
-        amount: 299.5,
-      },
-      {
-        id: 4,
-        name: "Content Writing (per 1000 words)",
-        hsnCode: "9983",
-        price: 75.0,
-        quantity: 4,
-        amount: 300.0,
-      },
-    ],
-    subtotal: 2299.49,
-    taxDetails: [
-      { name: "SGST (9%)", amount: 206.95 },
-      { name: "CGST (9%)", amount: 206.95 },
-    ],
-    total: 2713.39,
-  }
+      company: string;
+      address: string;
+      city: string;
+      email: string;
+      phone: string;
+      gstIn: string;
+    };
+    items: OrderItem[];
+    subtotal: number;
+    taxDetails: {
+      name: string;
+      amount: number;
+    }[];
+    totalAmount: number;
+  };
+  const [invoiceData, setInvoiceData] = useState<InvoiceData | null>(null);
+  useEffect(() => {
+    const fetchInvoiceData = async () => {
+        try {
+            const response = await fetch(`/api/invoices/get-invoiceData`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ invoiceNumber: invoiceNo }),
+            });
+
+            if (!response.ok) throw new Error("Failed to fetch invoice data");
+            const data = await response.json();
+            console.log("Fetched invoice data:", data);
+            setInvoiceData(data.invoiceData);
+        } catch (error) {
+            console.error("Error fetching order:", error);
+        }
+    };
+    fetchInvoiceData();
+}, [invoiceNo]);
 
   // Calculate totals
-  const taxTotal = invoiceData.taxDetails.reduce((sum, tax) => sum + tax.amount, 0)
+  // const taxTotal = invoiceData.taxDetails.reduce((sum, tax) => sum + tax.amount, 0)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4">
@@ -104,22 +153,22 @@ export default function InvoicePage({invoiceNo}: { invoiceNo: string }) {
                 AC
               </div>
               <div>
-                <h2 className="font-bold text-xl">{invoiceData.seller.name}</h2>
-                <p className="text-sm text-gray-500">{invoiceData.seller.taxId}</p>
+                <h2 className="font-bold text-xl">{invoiceData?.seller.name}</h2>
+                <p className="text-sm text-gray-500">{invoiceData?.seller.taxId}</p>
               </div>
             </div>
             <div className="space-y-1">
-              <h3 className="font-bold text-2xl text-right text-gray-800">#{invoiceData.invoiceNumber}</h3>
+              <h3 className="font-bold text-2xl text-right text-gray-800">#{invoiceData?.invoiceNumber}</h3>
               <div className="flex items-center gap-2 text-sm text-gray-500 justify-end">
                 <CalendarIcon className="h-4 w-4 text-purple-500" />
                 <span>
-                  Issue Date: <span className="font-medium text-gray-700">{invoiceData.invoiceDate}</span>
+                  Issue Date: <span className="font-medium text-gray-700">{invoiceData?.invoiceDate}</span>
                 </span>
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-500 justify-end">
                 <CalendarIcon className="h-4 w-4 text-purple-500" />
                 <span>
-                  Order Date: <span className="font-medium text-gray-700">{invoiceData.orderDate}</span>
+                  Order Date: <span className="font-medium text-gray-700">{invoiceData?.orderDate}</span>
                 </span>
               </div>
             </div>
@@ -132,11 +181,11 @@ export default function InvoicePage({invoiceNo}: { invoiceNo: string }) {
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-600 to-pink-600"></div>
             <h3 className="font-semibold text-purple-600 mb-3">Billed From</h3>
             <div className="space-y-1">
-              <p className="font-medium text-gray-800">{invoiceData.seller.name}</p>
-              <p className="text-sm text-gray-600">{invoiceData.seller.address}</p>
-              <p className="text-sm text-gray-600">{invoiceData.seller.city}</p>
-              <p className="text-sm text-gray-600">{invoiceData.seller.email}</p>
-              <p className="text-sm text-gray-600">{invoiceData.seller.phone}</p>
+              <p className="font-medium text-gray-800">{invoiceData?.seller.name}</p>
+              <p className="text-sm text-gray-600">{invoiceData?.seller.address}</p>
+              <p className="text-sm text-gray-600">{invoiceData?.seller.city}</p>
+              <p className="text-sm text-gray-600">{invoiceData?.seller.email}</p>
+              <p className="text-sm text-gray-600">{invoiceData?.seller.phone}</p>
             </div>
           </Card>
 
@@ -144,12 +193,12 @@ export default function InvoicePage({invoiceNo}: { invoiceNo: string }) {
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-pink-600 to-purple-600"></div>
             <h3 className="font-semibold text-pink-600 mb-3">Billed To</h3>
             <div className="space-y-1">
-              <p className="font-medium text-gray-800">{invoiceData.customer.name}</p>
-              <p className="text-sm text-gray-600">{invoiceData.customer.company}</p>
-              <p className="text-sm text-gray-600">{invoiceData.customer.address}</p>
-              <p className="text-sm text-gray-600">{invoiceData.customer.city}</p>
-              <p className="text-sm text-gray-600">{invoiceData.customer.email}</p>
-              <p className="text-sm text-gray-600">{invoiceData.customer.phone}</p>
+              <p className="font-medium text-gray-800">{invoiceData?.customer.company}</p>
+              <p className="text-sm text-gray-600">{invoiceData?.customer.address}</p>
+              <p className="text-sm text-gray-600">{invoiceData?.customer.city}</p>
+              <p className="text-sm text-gray-600">{invoiceData?.customer.email}</p>
+              <p className="text-sm text-gray-600">{invoiceData?.customer.phone}</p>
+              <p className="text-sm text-gray-600">{invoiceData?.customer.gstIn}</p>
             </div>
           </Card>
         </div>
@@ -169,14 +218,14 @@ export default function InvoicePage({invoiceNo}: { invoiceNo: string }) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {invoiceData.items.map((item, index) => (
-                <TableRow key={item.id} className="hover:bg-purple-50">
+              {invoiceData?.items.map((item, index) => (
+                <TableRow key={item.productId} className="hover:bg-purple-50">
                   <TableCell className="text-center font-medium text-gray-500">{index + 1}</TableCell>
-                  <TableCell className="font-medium">{item.name}</TableCell>
-                  <TableCell className="text-gray-600">{item.hsnCode}</TableCell>
-                  <TableCell className="text-right">₹{item.price.toFixed(2)}</TableCell>
+                  <TableCell className="font-medium">{item.productName}</TableCell>
+                  <TableCell className="text-gray-600">{item.hsn}</TableCell>
+                  <TableCell className="text-right">₹{item.priceAtTime}</TableCell>
                   <TableCell className="text-right">{item.quantity}</TableCell>
-                  <TableCell className="text-right font-medium">₹{item.amount.toFixed(2)}</TableCell>
+                  <TableCell className="text-right font-medium">₹{Number(item.total).toFixed(2)}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -185,14 +234,14 @@ export default function InvoicePage({invoiceNo}: { invoiceNo: string }) {
                 <TableCell colSpan={5} className="text-right font-medium">
                   Subtotal
                 </TableCell>
-                <TableCell className="text-right">₹{invoiceData.subtotal.toFixed(2)}</TableCell>
+                <TableCell className="text-right">₹{Number(invoiceData?.subtotal).toFixed(2)}</TableCell>
               </TableRow>
-              {invoiceData.taxDetails.map((tax, index) => (
+              {invoiceData?.taxDetails.map((tax, index) => (
                 <TableRow key={index} className="bg-gray-50 hover:bg-gray-50">
                   <TableCell colSpan={5} className="text-right font-medium">
                     {tax.name}
                   </TableCell>
-                  <TableCell className="text-right">₹{tax.amount.toFixed(2)}</TableCell>
+                  <TableCell className="text-right">₹{Number(tax.amount).toFixed(2)}</TableCell>
                 </TableRow>
               ))}
               <TableRow className="bg-gradient-to-r from-purple-100 to-pink-100 hover:from-purple-100 hover:to-pink-100">
@@ -200,7 +249,7 @@ export default function InvoicePage({invoiceNo}: { invoiceNo: string }) {
                   Total
                 </TableCell>
                 <TableCell className="text-right font-bold text-lg text-purple-700">
-                ₹{invoiceData.total.toFixed(2)}
+                ₹{Number(invoiceData?.totalAmount).toFixed(2)}
                 </TableCell>
               </TableRow>
             </TableFooter>
@@ -232,7 +281,7 @@ export default function InvoicePage({invoiceNo}: { invoiceNo: string }) {
         {/* Footer */}
         <footer className="text-center text-sm text-gray-500 p-6 rounded-lg shadow-md border-none">
           <div className=" text-xs text-gray-400">
-            Invoice generated on {invoiceData.invoiceDate} • JN Traders © 2025
+            Invoice generated on {invoiceData?.invoiceDate} • JN Traders © 2025
           </div>
         </footer>
       </div>

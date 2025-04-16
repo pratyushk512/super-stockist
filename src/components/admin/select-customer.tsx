@@ -50,7 +50,7 @@ export default function CustomerSearch({ onSelectCustomer }: CustomerSearchProps
   const filteredCustomers = useMemo(() => {
     if (!searchTerm) return customers;
     return customers.filter((customer) =>
-      customer.customerName.toLowerCase().includes(searchTerm.toLowerCase())
+      customer.companyName.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [customers, searchTerm]);
 
@@ -77,7 +77,7 @@ export default function CustomerSearch({ onSelectCustomer }: CustomerSearchProps
                 {filteredCustomers.map((customer) => (
                   <CommandItem
                     key={customer._id}
-                    value={customer.customerName}
+                    value={customer.companyName}
                     onSelect={() => {
                       onSelectCustomer(customer);
                       setSearchTerm("");
@@ -85,7 +85,7 @@ export default function CustomerSearch({ onSelectCustomer }: CustomerSearchProps
                     }}
                   >
                     <Check className="mr-2 h-4 w-4 opacity-100" />
-                    {customer.customerName}
+                    {customer.companyName}
                   </CommandItem>
                 ))}
               </CommandGroup>
