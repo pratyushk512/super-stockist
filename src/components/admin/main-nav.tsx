@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { LayoutDashboard, ShoppingCart, FileText, Package, Users, UserCircle, Settings } from "lucide-react"
+import { LayoutDashboard, ShoppingCart, FileText, Package, Users, UserCircle, Settings, Receipt } from "lucide-react"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { Menu } from "lucide-react"
@@ -26,6 +26,11 @@ const items = [
     icon: FileText,
   },
   {
+    title: "Payments",
+    href: "/admin/payments",
+    icon: Receipt,
+  },
+  {
     title: "Products",
     href: "/admin/products",
     icon: Package,
@@ -37,13 +42,8 @@ const items = [
   },
   {
     title: "Salesmen",
-    href: "/admin/salesmen",
+    href: "/admin/sales",
     icon: UserCircle,
-  },
-  {
-    title: "Settings",
-    href: "/admin/settings",
-    icon: Settings,
   },
 ]
 

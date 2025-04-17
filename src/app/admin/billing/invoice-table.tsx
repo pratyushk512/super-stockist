@@ -17,6 +17,8 @@ import { Badge } from "@/components/ui/badge"
 import { useInvoicesStore } from "@/store/invoiceStore"
 import Loader from "@/components/Loader"
 import { useRouter } from "next/navigation"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+//import { PaymentModal } from "./payment-modal"
 export function InvoiceTable() {
   const [yearFilter, setYearFilter] = useState<string | undefined>(undefined)
   const [monthFilter, setMonthFilter] = useState<string | undefined>(undefined)
@@ -28,7 +30,21 @@ export function InvoiceTable() {
 
   const [currentPage, setCurrentPage] = useState(1)
   const pageSize = 10
-  const router= useRouter()
+
+  const [selectedInvoiceId, setSelectedInvoiceId] = useState<string | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const handleViewPayments = (invoiceId: string) => {
+    setSelectedInvoiceId(invoiceId)
+    setIsModalOpen(true)
+  }
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false)
+    setSelectedInvoiceId(null)
+  }
+
+  const router = useRouter()
   useEffect(() => {
     fetchInvoices()
   }, [])
@@ -62,16 +78,16 @@ export function InvoiceTable() {
     const invoiceYear = invoiceDate.getFullYear().toString()
     const invoiceMonth = (invoiceDate.getMonth() + 1).toString()
     const invoiceDay = invoiceDate.toISOString().split("T")[0]
-  
+
     if (yearFilter && yearFilter !== "all" && invoiceYear !== yearFilter) return false
     if (monthFilter && monthFilter !== "all" && invoiceMonth !== monthFilter) return false
     if (dateFilter && invoiceDay !== dateFilter) return false
     if (customerFilter && !invoice.companyName.toLowerCase().includes(customerFilter.toLowerCase())) return false
     if (statusFilter !== "all" && invoice.paymentStatus.toLowerCase() !== statusFilter.toLowerCase()) return false
-  
+
     return true
   })
-  
+
 
   const totalPages = Math.ceil(filteredInvoices.length / pageSize)
   const startIndex = (currentPage - 1) * pageSize
@@ -85,10 +101,11 @@ export function InvoiceTable() {
     if (currentPage > 1) setCurrentPage((prev) => prev - 1)
   }
 
-  const handleViewInvoice=(invoiceNo: string) => {
+  const handleViewInvoice = (invoiceNo: string) => {
     console.log("View Invoice:", invoiceNo)
     router.push(`/admin/billing/${invoiceNo}`)
   }
+
 
   return (
     <Card className="border-0 shadow-lg">
@@ -176,6 +193,13 @@ export function InvoiceTable() {
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">
+                        <Button 
+                        variant="outline" 
+                        size="sm"
+                        className="bg-blue-600"
+                         onClick={() => handleViewPayments(invoice.invoiceNumber)}>
+                          Payments
+                        </Button>
                         <Button size="sm" variant="outline" className="bg-yellow-600" onClick={() => handleViewInvoice(invoice.invoiceNumber)}>
                           <Eye className="h-4 w-4 mr-1" />
                           View
@@ -197,6 +221,14 @@ export function InvoiceTable() {
               )}
             </TableBody>
           </Table>
+          <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+            <DialogContent className="max-w-3xl">
+              <DialogHeader>
+                <DialogTitle>Payment Details</DialogTitle>
+              </DialogHeader>
+              {/* {selectedInvoiceId && <PaymentModal invoiceId={selectedInvoiceId} onClose={handleCloseModal} />} */}
+            </DialogContent>
+          </Dialog>
         </div>
 
         {/* Pagination Controls */}

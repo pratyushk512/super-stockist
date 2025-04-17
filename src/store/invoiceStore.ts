@@ -31,6 +31,4 @@ export const useInvoicesStore = create<InvoiceState>((set, get) => ({
       });
     }
   },
-
-
 }));
