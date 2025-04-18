@@ -1,4 +1,4 @@
-import { MainNav } from "@/components/admin/main-nav"
+import { MainNav } from "@/components/sales/sales-nav"
 import { InvoiceTable } from "./invoice-table"
 import { Search } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"

@@ -1,10 +1,16 @@
-import { MainNav } from "@/components/admin/main-nav"
-import { InvoiceTable } from "./invoice-table"
-import { Search } from "lucide-react"
-import { ThemeToggle } from "@/components/theme-toggle"
-import { UserNav } from "@/components/admin/user-nav"
 
-export default function InvoiceDashboard() {
+import { MainNav } from "@/components/admin/main-nav"
+import ViewInvoice from "../view-invoice"
+import { Search } from "@/components/admin/search"
+import { UserNav } from "@/components/admin/user-nav"
+import { ThemeToggle } from "@/components/theme-toggle"
+
+
+export default async function InvoicePage({ params }: { params: Promise<{ invoiceNo: string }> }) {
+
+  const { invoiceNo } = await params;
+  console.log(invoiceNo)
+  
   return (
     <>
       <div className="border-b">
@@ -17,9 +23,8 @@ export default function InvoiceDashboard() {
           </div>
         </div>
       </div>
-      <div className="container mx-auto py-10 px-4">
-        <h1 className="text-3xl font-bold mb-8">Invoice Management</h1>
-        <InvoiceTable />
+      <div className="container mx-auto p-4">
+        <ViewInvoice invoiceNo={invoiceNo} />
       </div>
     </>
   )

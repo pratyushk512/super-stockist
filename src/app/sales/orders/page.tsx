@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { MainNav } from "@/components/admin/main-nav"
+import { MainNav } from "@/components/sales/sales-nav"
 import { Search } from "@/components/admin/search"
 import { UserNav } from "@/components/admin/user-nav"
 import { Order, OrderStatus } from "@/types/types"
@@ -46,7 +46,7 @@ export default function OrdersTable() {
 
     const handleViewOrder = (orderNo: number) => {
         console.log("View Order:", orderNo)
-        router.push(`/admin/orders/${orderNo}`)
+        router.push(`/sales/orders/${orderNo}`)
     }
 
     if (isLoading) {
@@ -85,7 +85,7 @@ export default function OrdersTable() {
                     </div>
                     <Button
                         variant="outline"
-                        onClick={() => router.push("/admin/products/store")}
+                        onClick={() => router.push("/sales/products/store")}
                     >
                         New Order
                     </Button>
@@ -128,7 +128,7 @@ export default function OrdersTable() {
                                 <TableHead>Status</TableHead>
                                 <TableHead>Customer Name</TableHead>
                                 <TableHead className="hidden sm:table-cell">Order Date</TableHead>
-                                <TableHead>Created By</TableHead>
+                                <TableHead className="hidden sm:table-cell">Created By</TableHead>
                                 <TableHead className="text-right">Actions</TableHead>
                             </TableRow>
                         </TableHeader>
