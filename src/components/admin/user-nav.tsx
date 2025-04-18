@@ -21,7 +21,7 @@ export function UserNav() {
     fetch("api/users/logout")
     toast({
       title: "Logged out successfully",})
-    router.push("/admin")
+    router.push("/")
   }
   return (
     <DropdownMenu>

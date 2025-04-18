@@ -7,11 +7,92 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useRouter } from "next/navigation"
+import { useToast } from "@/hooks/use-toast"
+import Loader from "@/components/Loader"
+import { set } from "mongoose"
 
 export default function DualLoginPage() {
   const [showAdminPassword, setShowAdminPassword] = useState(false)
   const [showSalesPassword, setShowSalesPassword] = useState(false)
+  const [adminEmail, setAdminEmail] = useState("")
+  const [adminPassword, setAdminPassword] = useState("")
+  const [salesEmail, setSalesEmail] = useState("")
+  const [salesPassword, setSalesPassword] = useState("")
+  const router=useRouter()
+  const {toast}=useToast()
+  const [isLoading, setIsLoading] = useState(false)
+  const handleAdminLogin = () => {
+    setIsLoading(true)
+    console.log("Admin Login:", { adminEmail, adminPassword })
+    const response= fetch("/api/users/admin-login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email: adminEmail, password: adminPassword }),
+    })
+    response
+      .then((res) => {
+        if (res.ok) {
+          router.push("/admin/dashboard")
+          toast({
+            title: "Login successful",
+            description: "Welcome to the admin dashboard!",
+            variant: "default",
+          })
+        } else {
+          console.error("Login failed")
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error)
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
+  }
+  
+  const handleSalesLogin = () => {
+    setIsLoading(true)
+    console.log("Sales Login:", { salesEmail, salesPassword })
+    const response= fetch("/api/users/sales-login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email: salesEmail, password: salesPassword }),
+    })
+    response
+      .then((res) => {
+        if (res.ok) {
+          router.push("/sales/home")
+          toast({
+            title: "Login successful",
+            description: "Welcome to the sales portal!",
+            variant: "default",
+          })
+        } else {
+          console.error("Login failed")
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error)
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
+  } 
 
+  if(isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="loader">
+          <Loader />
+        </div>
+      </div>
+    )
+  }
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
       <header className="container flex h-20 items-center justify-center py-6">
@@ -41,6 +122,8 @@ export default function DualLoginPage() {
                       type="email"
                       placeholder="admin@example.com"
                       className="pl-9 text-slate-900 dark:text-slate-100"
+                      value={adminEmail}
+                      onChange={(e) => setAdminEmail(e.target.value)}
                     />
                   </div>
                 </div>
@@ -62,6 +145,8 @@ export default function DualLoginPage() {
                       id="admin-password"
                       type={showAdminPassword ? "text" : "password"}
                       className="pl-9 pr-9 text-slate-900 dark:text-slate-100"
+                      value={adminPassword}
+                      onChange={(e) => setAdminPassword(e.target.value)}
                     />
                     <button
                       type="button"
@@ -73,7 +158,9 @@ export default function DualLoginPage() {
                     </button>
                   </div>
                 </div>
-                <Button className="w-full bg-slate-800 text-white hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600">
+                <Button className="w-full bg-slate-800 text-white hover:bg-slate-700 dark:bg-slate-700 dark:hover:bg-slate-600"
+                onClick={handleAdminLogin}
+                >
                   Sign in to Admin
                 </Button>
               </CardContent>
@@ -109,6 +196,8 @@ export default function DualLoginPage() {
                       type="email"
                       placeholder="sales@example.com"
                       className="pl-9 text-slate-900 dark:text-slate-100"
+                      value={salesEmail}
+                      onChange={(e) => setSalesEmail(e.target.value)}
                     />
                   </div>
                 </div>
@@ -130,6 +219,8 @@ export default function DualLoginPage() {
                       id="sales-password"
                       type={showSalesPassword ? "text" : "password"}
                       className="pl-9 pr-9 text-slate-900 dark:text-slate-100"
+                      value={salesPassword}
+                      onChange={(e) => setSalesPassword(e.target.value)}
                     />
                     <button
                       type="button"
@@ -141,7 +232,9 @@ export default function DualLoginPage() {
                     </button>
                   </div>
                 </div>
-                <Button className="w-full bg-emerald-600 text-white hover:bg-emerald-700 dark:bg-emerald-700 dark:hover:bg-emerald-600">
+                <Button className="w-full bg-emerald-600 text-white hover:bg-emerald-700 dark:bg-emerald-700 dark:hover:bg-emerald-600"
+                onClick={handleSalesLogin}
+                >
                   Sign in to Sales
                 </Button>
               </CardContent>

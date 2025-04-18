@@ -19,8 +19,8 @@ export async function middleware(req: NextRequest) {
     const path = req.nextUrl.pathname;
     console.log("Path:", path);
 
-    // Allow login pages to be accessed without authentication
-    if (path === '/' || path === '/admin/' || path === '/sales/') {
+    // Allow access to login page
+    if (path === '/') {
         return NextResponse.next();
     }
 
@@ -34,11 +34,9 @@ export async function middleware(req: NextRequest) {
     // Role-based route protection
     if (path.startsWith('/admin/') && user.userType !== 'admin') {
         return redirectToLogin(req);
-    } 
-    if (path.startsWith('/sales/') && user.userType !== 'sales') {
-        return redirectToLogin(req);
-    } 
-    if (!path.startsWith('/admin/') && !path.startsWith('/sales/') && user.userType !== 'customer') {
+    }
+
+    if (path.startsWith('/sales/') && user.userType !== 'salesman') {
         return redirectToLogin(req);
     }
 
@@ -46,14 +44,7 @@ export async function middleware(req: NextRequest) {
 }
 
 function redirectToLogin(req: NextRequest) {
-    const path = req.nextUrl.pathname;
-    let loginRoute = '/';
-    if (path.startsWith('/admin/') && path !== '/admin/') {
-        loginRoute = '/admin/';
-    } else if (path.startsWith('/sales/') && path !== '/sales/') {
-        loginRoute = '/sales/';
-    }
-    return NextResponse.redirect(new URL(loginRoute, req.url));
+    return NextResponse.redirect(new URL('/', req.url));
 }
 
 export const config = {

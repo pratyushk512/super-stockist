@@ -150,7 +150,7 @@ export default function InvoicePage({invoiceNo}: { invoiceNo: string }) {
           <div className="flex flex-col md:flex-row justify-between gap-6 relative z-10">
             <div className="flex items-center gap-3">
               <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center text-white font-bold shadow-md">
-                AC
+                JNT
               </div>
               <div>
                 <h2 className="font-bold text-xl">{invoiceData?.seller.name}</h2>
