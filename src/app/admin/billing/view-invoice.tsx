@@ -8,67 +8,6 @@ import { OrderItem } from "@/types/types";
 
 export default function InvoicePage({invoiceNo}: { invoiceNo: string }) {
   
-  // const invoiceData = {
-  //   invoiceNumber: "INV-2023-0042",
-  //   invoiceDate: "April 12, 2025",
-  //   orderDate: "April 10, 2025",
-  //   seller: {
-  //     name: "JN Traders",
-  //     address: "Bye Lane,West Market Road,Upper Bazar",
-  //     city: "Ranchi,Jharkhand, 834001",
-  //     email: "",
-  //     phone: "+91 9431596720",
-  //     taxId: "GSTIN: 20AABCU1234C1Z5",
-  //   },
-  //   customer: {
-  //     company: "Smith Enterprises",
-  //     address: "456 Commerce Street",
-  //     city: "New York, NY 10001",
-  //     email: "john@smithenterprises.com",
-  //     phone: "+1 (555) 987-6543",
-  //     gstIn: "GSTIN: 20AABCU1234C1Z5",
-  //   },
-  //   items: [
-  //     {
-  //       id: 1,
-  //       name: "Premium Web Hosting (Annual)",
-  //       hsnCode: "9983",
-  //       price: 199.99,
-  //       quantity: 1,
-  //       amount: 199.99,
-  //     },
-  //     {
-  //       id: 2,
-  //       name: "Custom Website Development",
-  //       hsnCode: "9983",
-  //       price: 1500.0,
-  //       quantity: 1,
-  //       amount: 1500.0,
-  //     },
-  //     {
-  //       id: 3,
-  //       name: "SEO Package - Basic",
-  //       hsnCode: "9983",
-  //       price: 299.5,
-  //       quantity: 1,
-  //       amount: 299.5,
-  //     },
-  //     {
-  //       id: 4,
-  //       name: "Content Writing (per 1000 words)",
-  //       hsnCode: "9983",
-  //       price: 75.0,
-  //       quantity: 4,
-  //       amount: 300.0,
-  //     },
-  //   ],
-  //   subtotal: 2299.49,
-  //   taxDetails: [
-  //     { name: "SGST (9%)", amount: 206.95 },
-  //     { name: "CGST (9%)", amount: 206.95 },
-  //   ],
-  //   totalAmount: 2713.39,
-  // }
   type InvoiceData = {
     invoiceNumber: string;
     invoiceDate: string;
@@ -118,8 +57,6 @@ export default function InvoicePage({invoiceNo}: { invoiceNo: string }) {
     fetchInvoiceData();
 }, [invoiceNo]);
 
-  // Calculate totals
-  // const taxTotal = invoiceData.taxDetails.reduce((sum, tax) => sum + tax.amount, 0)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4">
@@ -220,28 +157,28 @@ export default function InvoicePage({invoiceNo}: { invoiceNo: string }) {
             <TableBody>
               {invoiceData?.items.map((item, index) => (
                 <TableRow key={item.productId} className="hover:bg-purple-50">
-                  <TableCell className="text-center font-medium text-gray-500">{index + 1}</TableCell>
-                  <TableCell className="font-medium">{item.productName}</TableCell>
-                  <TableCell className="text-gray-600">{item.hsn}</TableCell>
-                  <TableCell className="text-right">₹{item.priceAtTime}</TableCell>
-                  <TableCell className="text-right">{item.quantity}</TableCell>
-                  <TableCell className="text-right font-medium">₹{Number(item.total).toFixed(2)}</TableCell>
+                  <TableCell className="text-center font-medium text-black">{index + 1}</TableCell>
+                  <TableCell className="font-medium text-black">{item.productName}</TableCell>
+                  <TableCell className="text-black">{item.hsn}</TableCell>
+                  <TableCell className="text-right text-black">₹{item.priceAtTime}</TableCell>
+                  <TableCell className="text-right text-black">{item.quantity}</TableCell>
+                  <TableCell className="text-right font-medium text-black">₹{Number(item.total).toFixed(2)}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
             <TableFooter>
               <TableRow className="bg-gray-50 hover:bg-gray-50">
-                <TableCell colSpan={5} className="text-right font-medium">
+                <TableCell colSpan={5} className="text-right font-medium text-black">
                   Subtotal
                 </TableCell>
-                <TableCell className="text-right">₹{Number(invoiceData?.subtotal).toFixed(2)}</TableCell>
+                <TableCell className="text-right text-black">₹{Number(invoiceData?.subtotal).toFixed(2)}</TableCell>
               </TableRow>
               {invoiceData?.taxDetails.map((tax, index) => (
                 <TableRow key={index} className="bg-gray-50 hover:bg-gray-50">
-                  <TableCell colSpan={5} className="text-right font-medium">
+                  <TableCell colSpan={5} className="text-right font-medium text-black">
                     {tax.name}
                   </TableCell>
-                  <TableCell className="text-right">₹{Number(tax.amount).toFixed(2)}</TableCell>
+                  <TableCell className="text-right text-black">₹{Number(tax.amount).toFixed(2)}</TableCell>
                 </TableRow>
               ))}
               <TableRow className="bg-gradient-to-r from-purple-100 to-pink-100 hover:from-purple-100 hover:to-pink-100">
