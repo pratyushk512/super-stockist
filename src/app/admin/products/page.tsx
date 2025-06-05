@@ -8,7 +8,6 @@ import {
   RefreshCw,
   Trash2
 } from "lucide-react";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { MainNav } from "@/components/admin/main-nav";
 import { Search } from "@/components/admin/search";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -71,7 +70,7 @@ function App() {
   };
   const filteredAndSortedProducts = useMemo(() => {
     console.log("filter :", products);
-    let filtered = products.filter((product) =>
+    const filtered = products.filter((product) =>
       product.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 

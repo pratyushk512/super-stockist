@@ -21,7 +21,6 @@ import { MainNav } from "@/components/admin/main-nav";
 import { Search } from "@/components/admin/search";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { UserNav } from "@/components/admin/user-nav";
-import { createOrderByAdmins } from "@/utils/createOrderByAdmins";
 import { DrawerDialog } from "@/components/admin/checkout";
 
 export interface CartItem {

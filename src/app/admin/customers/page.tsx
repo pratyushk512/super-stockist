@@ -15,7 +15,6 @@ import { FileSearch, ArrowUpDown, Eye } from 'lucide-react';
 import { useCustomerStore } from '@/store/customerStore';
 import Loader from "@/components/Loader";
 import React, { useState, useMemo, useEffect } from 'react';
-import { Customer} from '@/types/types';
 
 
 function App() {

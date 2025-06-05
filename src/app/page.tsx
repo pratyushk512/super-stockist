@@ -10,7 +10,6 @@ import { Label } from "@/components/ui/label"
 import { useRouter } from "next/navigation"
 import { useToast } from "@/hooks/use-toast"
 import Loader from "@/components/Loader"
-import { set } from "mongoose"
 
 export default function DualLoginPage() {
   const [showAdminPassword, setShowAdminPassword] = useState(false)

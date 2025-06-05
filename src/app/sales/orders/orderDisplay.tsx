@@ -2,17 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
-import { Edit2, Save } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Loader from "@/components/Loader";
-import { Order, OrderItem } from "@/types/types";
-import { title } from "process";
+import { Order } from "@/types/types";
 import { useToast } from "@/hooks/use-toast";
-import { RainbowButton } from "@/components/magicui/rainbow-button";
 
 export default function OrderDisplay({ orderNo }: { orderNo: number }) {
     const [order, setOrder] = useState<Order | null>(null);
@@ -20,53 +14,53 @@ export default function OrderDisplay({ orderNo }: { orderNo: number }) {
     // const [editedOrder, setEditedOrder] = useState<Partial<Order>>({});
     const {toast}=useToast()
     const router=useRouter()
-    const handleGenerateInvoice = async () => {
-        if (order?.status === "Completed" || order?.status === "Cancelled") {
-            toast({
-                title: "Cannot generate invoice for completed or cancelled orders",
-                variant: "destructive",
-            });
-            return;
-        }
+    // const handleGenerateInvoice = async () => {
+    //     if (order?.status === "Completed" || order?.status === "Cancelled") {
+    //         toast({
+    //             title: "Cannot generate invoice for completed or cancelled orders",
+    //             variant: "destructive",
+    //         });
+    //         return;
+    //     }
     
-        const baseAmount = Number(order?.totalAmount ?? 0); 
-        const gstAmount = baseAmount * 0.18;
-        const totalAmount = baseAmount + gstAmount;
+    //     const baseAmount = Number(order?.totalAmount ?? 0); 
+    //     const gstAmount = baseAmount * 0.18;
+    //     const totalAmount = baseAmount + gstAmount;
     
-        const invoiceRequest = {
-            invoiceDate: order?.orderDate,
-            orderId: order?._id,
-            gstAmount,
-            gstPercentage: 0.18,
-            totalAmount: Number(totalAmount.toFixed(2)), 
-        };
+    //     const invoiceRequest = {
+    //         invoiceDate: order?.orderDate,
+    //         orderId: order?._id,
+    //         gstAmount,
+    //         gstPercentage: 0.18,
+    //         totalAmount: Number(totalAmount.toFixed(2)), 
+    //     };
     
-        console.log("Invoice Request:", invoiceRequest);
+    //     console.log("Invoice Request:", invoiceRequest);
     
-        const invoice = await fetch(`/api/invoices/generate-invoice`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(invoiceRequest),
-        });
+    //     const invoice = await fetch(`/api/invoices/generate-invoice`, {
+    //         method: "POST",
+    //         headers: { "Content-Type": "application/json" },
+    //         body: JSON.stringify(invoiceRequest),
+    //     });
         
-        if (!invoice.ok) {
-            toast({
-                title: "Error generating invoice",
-                variant: "destructive",
-            });
-            router.refresh();
-            return;
-        } else {
-            const invoiceData= await invoice.json();
-            console.log("Invoice Data:", invoiceData);
-            const invoiceNo = invoiceData.savedInvoice.invoiceNumber;
-            toast({
-                title: "Invoice generated successfully",
-                variant: "default",
-            });
-            router.push(`/admin/billing/${invoiceNo}`);
-        }
-    };
+    //     if (!invoice.ok) {
+    //         toast({
+    //             title: "Error generating invoice",
+    //             variant: "destructive",
+    //         });
+    //         router.refresh();
+    //         return;
+    //     } else {
+    //         const invoiceData= await invoice.json();
+    //         console.log("Invoice Data:", invoiceData);
+    //         const invoiceNo = invoiceData.savedInvoice.invoiceNumber;
+    //         toast({
+    //             title: "Invoice generated successfully",
+    //             variant: "default",
+    //         });
+    //         router.push(`/admin/billing/${invoiceNo}`);
+    //     }
+    // };
     
     useEffect(() => {
         const fetchOrder = async () => {

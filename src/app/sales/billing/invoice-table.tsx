@@ -26,23 +26,23 @@ export function InvoiceTable() {
   const [customerFilter, setCustomerFilter] = useState("")
   const [statusFilter, setStatusFilter] = useState<string>("all")
 
-  const { invoices, isLoading, error, fetchInvoices } = useInvoicesStore()
+  const { invoices, isLoading, fetchInvoices } = useInvoicesStore()
 
   const [currentPage, setCurrentPage] = useState(1)
   const pageSize = 10
 
-  const [selectedInvoiceId, setSelectedInvoiceId] = useState<string | null>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  // const [selectedInvoiceId, setSelectedInvoiceId] = useState<string | null>(null)
+  // const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const handleViewPayments = (invoiceId: string) => {
-    setSelectedInvoiceId(invoiceId)
-    setIsModalOpen(true)
-  }
+  // const handleViewPayments = (invoiceId: string) => {
+  //   setSelectedInvoiceId(invoiceId)
+  //   setIsModalOpen(true)
+  // }
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false)
-    setSelectedInvoiceId(null)
-  }
+  // const handleCloseModal = () => {
+  //   setIsModalOpen(false)
+  //   setSelectedInvoiceId(null)
+  // }
 
   const router = useRouter()
   useEffect(() => {
@@ -197,7 +197,8 @@ export function InvoiceTable() {
                         variant="outline" 
                         size="sm"
                         className="bg-blue-600"
-                         onClick={() => handleViewPayments(invoice.invoiceNumber)}>
+                        //  onClick={() => handleViewPayments(invoice.invoiceNumber)}
+                        >
                           Payments
                         </Button>
                         <Button size="sm" variant="outline" className="bg-yellow-600" onClick={() => handleViewInvoice(invoice.invoiceNumber)}>
@@ -221,7 +222,7 @@ export function InvoiceTable() {
               )}
             </TableBody>
           </Table>
-          <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+          <Dialog>
             <DialogContent className="max-w-3xl">
               <DialogHeader>
                 <DialogTitle>Payment Details</DialogTitle>
