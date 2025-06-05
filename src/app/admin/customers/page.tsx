@@ -3,12 +3,9 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  Package,
   PackagePlus,
-  RefreshCw,
   Trash2
 } from "lucide-react";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { MainNav } from "@/components/admin/main-nav";
 import { Search } from "@/components/admin/search";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -18,7 +15,7 @@ import { FileSearch, ArrowUpDown, Eye } from 'lucide-react';
 import { useCustomerStore } from '@/store/customerStore';
 import Loader from "@/components/Loader";
 import React, { useState, useMemo, useEffect } from 'react';
-import { Customer, Product } from '@/types/types';
+import { Customer} from '@/types/types';
 
 
 function App() {
@@ -39,43 +36,17 @@ function App() {
   }
 
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortConfig, setSortConfig] = useState<{
-    key: keyof Customer | null;
-    direction: 'asc' | 'desc';
-  }>({ key: null, direction: 'asc' });
+ 
 
-//   const handleSort = (key: keyof Product) => {
-//     setSortConfig({
-//       key,
-//       direction:
-//         sortConfig.key === key && sortConfig.direction === 'asc'
-//           ? 'desc'
-//           : 'asc',
-//     });
-//   };
   const filteredAndSortedCustomers = useMemo(() => {
     console.log("filter :", customers);
-    let filtered = customers.filter((cust) =>
+    const filtered = customers.filter((cust) =>
       cust.companyName.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    // if (sortConfig.key) {
-    //   filtered.sort((a, b) => {
-    //     const aValue = sortConfig.key === "price" ? parseFloat(a.price) : a[sortConfig.key!];
-    //     const bValue = sortConfig.key === "price" ? parseFloat(b.price) : b[sortConfig.key!];
-
-    //     if (aValue < bValue) {
-    //       return sortConfig.direction === "asc" ? -1 : 1;
-    //     }
-    //     if (aValue > bValue) {
-    //       return sortConfig.direction === "asc" ? 1 : -1;
-    //     }
-    //     return 0;
-    //   });
-    // }
 
     return filtered;
-  }, [customers,searchTerm, sortConfig]);
+  }, [customers,searchTerm]);
 
   if (isLoading) {
     return (

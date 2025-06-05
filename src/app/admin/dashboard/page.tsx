@@ -1,9 +1,9 @@
 import type { Metadata } from "next"
-import { DollarSign, Users, ShoppingCart, Activity } from "lucide-react"
+// import { DollarSign, Users, ShoppingCart, Activity } from "lucide-react"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Overview } from "./overview"
-import { RecentSales } from "./recent-sales"
+// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+// import { Overview } from "./overview"
+// import { RecentSales } from "./recent-sales"
 import { MainNav } from "@/components/admin/main-nav"
 import { Search } from "@/components/admin/search"
 import { UserNav } from "@/components/admin/user-nav"

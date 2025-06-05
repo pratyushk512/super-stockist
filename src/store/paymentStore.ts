@@ -17,7 +17,7 @@ interface Payment {
     salesmanId: string
     salesmanName: string
   }
-export const usePaymentStore = create<PaymentState>((set, get) => ({
+export const usePaymentStore = create<PaymentState>((set) => ({
   payments: [],
   isLoading: false,
   error: null,

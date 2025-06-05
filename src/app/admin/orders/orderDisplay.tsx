@@ -9,8 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Loader from "@/components/Loader";
-import { Order, OrderItem } from "@/types/types";
-import { title } from "process";
+import { Order } from "@/types/types";
 import { useToast } from "@/hooks/use-toast";
 import { RainbowButton } from "@/components/magicui/rainbow-button";
 

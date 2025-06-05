@@ -4,13 +4,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MainNav } from "@/components/admin/main-nav";
 import { Search } from "@/components/admin/search";
 import { UserNav } from "@/components/admin/user-nav";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useToast } from "@/hooks/use-toast"
-import { error } from "console";
 
 export default function CustomerForm() {
     const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm({

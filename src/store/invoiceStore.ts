@@ -8,7 +8,7 @@ interface InvoiceState {
   fetchInvoices: () => Promise<void>;
 }
 
-export const useInvoicesStore = create<InvoiceState>((set, get) => ({
+export const useInvoicesStore = create<InvoiceState>((set) => ({
   invoices: [],
   isLoading: false,
   error: null,

@@ -10,7 +10,7 @@ import { ThemeToggle } from "@/components/theme-toggle"
 import { MainNav } from "@/components/admin/main-nav"
 import { Search } from "@/components/admin/search"
 import { UserNav } from "@/components/admin/user-nav"
-import { Order, OrderStatus } from "@/types/types"
+import { OrderStatus } from "@/types/types"
 import { useOrdersStore } from "@/store/ordersStore"
 import Loader from "@/components/Loader"
 

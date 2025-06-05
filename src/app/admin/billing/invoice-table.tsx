@@ -26,7 +26,7 @@ export function InvoiceTable() {
   const [customerFilter, setCustomerFilter] = useState("")
   const [statusFilter, setStatusFilter] = useState<string>("all")
 
-  const { invoices, isLoading, error, fetchInvoices } = useInvoicesStore()
+  const { invoices, isLoading, fetchInvoices } = useInvoicesStore()
 
   const [currentPage, setCurrentPage] = useState(1)
   const pageSize = 10
